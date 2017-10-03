@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}Dondrekiel App{% endblock %}</title>
+    {% stylesheets '@bootstrap_css' %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% endstylesheets %}
+<body>
+
+
+{{ include('DondrekielBundle::/parts/navigation.html.twig') }}
+
+
+<div class="container map-container">
+    <div class="jumbotron">
+        {% block body %}{% endblock %}
+    </div>
+</div>
+
+
+{% javascripts '@jquery' '@bootstrap_js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk">
+</script>
+<script src="https://rawgit.com/asmsuechan/jquery_push_notification/master/push_notification.min.js"></script>
+
+</body>
+</html>

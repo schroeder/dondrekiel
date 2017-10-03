@@ -1,0 +1,9 @@
+app:
+    resource: '@DondrekielBundle/Controller/'
+    type: annotation
+
+users:
+    type:     rest
+    host:     app.dondrekiel.de
+    resource: DondrekielBundle\Controller\StationController
+    prefix:   rest
