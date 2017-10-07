@@ -122,3 +122,8 @@ fos_rest:
         failed_validation: HTTP_BAD_REQUEST
         default_engine: twig
         view_response_listener: true
+
+gos_web_socket:
+    server:
+        port: 8888        #The port the socket server will listen on
+        host: 127.0.0.1   #The host ip to bind to

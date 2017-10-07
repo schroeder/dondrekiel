@@ -12631,6 +12631,7 @@ if (typeof jQuery === 'undefined') {
 }(jQuery);
 
 var map;
+var websocket;
 
 $(document).ready(function () {
     if (navigator && navigator.geolocation) {
@@ -12638,6 +12639,18 @@ $(document).ready(function () {
     } else {
         console.log('Geolocation is not supported');
     }
+
+    websocket = WS.connect('wss://app.dondrekiel.de:8081');
+
+
+    websocket.on("socket/connect", function (session) {
+        console.log("Successfully Connected!");
+    })
+
+    websocket.on("socket/disconnect", function (error) {
+        console.log("Disconnected for " + error.reason + " with code " + error.code);
+    })
+
 });
 
 function errorCallback() {
