@@ -17,3 +17,4 @@
 /web/bundles/
 /.idea
 /log
+/app/config/parameters.yml.dist
