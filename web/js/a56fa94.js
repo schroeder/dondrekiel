@@ -12640,16 +12640,18 @@ $(document).ready(function () {
         console.log('Geolocation is not supported');
     }
 
-    websocket = WS.connect('wss://app.dondrekiel.de:8081');
+    if (wss_enabled != 0) {
+        websocket = WS.connect('wss://' + app_hostname + ':8081');
 
 
-    websocket.on("socket/connect", function (session) {
-        console.log("Successfully Connected!");
-    })
+        websocket.on("socket/connect", function (session) {
+            console.log("Successfully Connected!");
+        })
 
-    websocket.on("socket/disconnect", function (error) {
-        console.log("Disconnected for " + error.reason + " with code " + error.code);
-    })
+        websocket.on("socket/disconnect", function (error) {
+            console.log("Disconnected for " + error.reason + " with code " + error.code);
+        })
+    }
 
 });
 

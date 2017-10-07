@@ -37,6 +37,9 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
+    globals:
+        app_hostname: "%app_hostname%"
+        wss_enabled: %wss_enabled%
 
 # Doctrine Configuration
 doctrine:

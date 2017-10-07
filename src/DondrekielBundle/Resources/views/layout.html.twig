@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>{% block title %}Dondrekiel App{% endblock %}</title>
-    {% stylesheets '@bootstrap_css' %}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset_url }}"/>
+    {% stylesheets
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap-theme.css'
+    '@DondrekielBundle/Resources/public/css/dondrekiel.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
     {% endstylesheets %}
 <body>
 
@@ -21,7 +24,15 @@
 </div>
 
 
-{{ ws_client() }}
+<script type="text/javascript">
+    var app_hostname = "{{ app_hostname }}";
+    var wss_enabled = {{ wss_enabled }};
+</script>
+
+{% if wss_enabled %}
+    {{ ws_client() }}
+{% endif %}
+
 
 {% javascripts '@jquery' '@bootstrap_js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>

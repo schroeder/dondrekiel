@@ -4,6 +4,6 @@ app:
 
 users:
     type:     rest
-    host:     app.dondrekiel.de
+    host:     "%app_hostname%"
     resource: DondrekielBundle\Controller\StationController
     prefix:   rest
