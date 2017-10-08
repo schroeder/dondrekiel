@@ -8,12 +8,20 @@ $(document).ready(function () {
         console.log('Geolocation is not supported');
     }
 
-    if (wss_enabled != 0) {
-        websocket = WS.connect('wss://' + app_hostname + ':8081');
+    if (wss_enabled == 1) {
+        websocket = WS.connect('wss://' + app_hostname + ':' + wss_port);
 
 
         websocket.on("socket/connect", function (session) {
             console.log("Successfully Connected!");
+
+            session.subscribe("dondrekiel/channel", function (uri, payload) {
+                $.notify("Received message: " + payload);
+                console.log("Received message: ", payload);
+            });
+
+            /*session.publish("dondrekiel/channel", "This is a message!");*/
+
         })
 
         websocket.on("socket/disconnect", function (error) {
@@ -84,7 +92,7 @@ function successCallback(position) {
 //            alert("finished");
         });
 
-    $.notify("done");
+//    $.notify("done");
 
 
 }

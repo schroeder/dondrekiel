@@ -27,20 +27,24 @@
 <script type="text/javascript">
     var app_hostname = "{{ app_hostname }}";
     var wss_enabled = {{ wss_enabled }};
+    var wss_port = {{ wss_port }};
 </script>
 
 {% if wss_enabled %}
     {{ ws_client() }}
 {% endif %}
 
-
-{% javascripts '@jquery' '@bootstrap_js' %}
+{% javascripts
+'%kernel.root_dir%/../vendor/components/jquery/jquery.js'
+'%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
+'@DondrekielBundle/Resources/public/js/lib/push_notification.min.js'
+'@DondrekielBundle/Resources/public/js/dondrekiel.js' %}
 <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
+
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk">
 </script>
-<script src="https://rawgit.com/asmsuechan/jquery_push_notification/master/push_notification.min.js"></script>
 
 </body>
 </html>

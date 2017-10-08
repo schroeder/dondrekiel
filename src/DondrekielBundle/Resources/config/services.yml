@@ -1,0 +1,17 @@
+services:
+    dondrekiel.rpc_dondrekiel_service:
+        class: DondrekielBundle\RPC\DondrekielService
+        tags:
+            - { name: gos_web_socket.rpc }
+
+    dondrekiel.topic_dondrekiel_service:
+        class: DondrekielBundle\Topic\DondrekielTopic
+        arguments:
+            - '@gos_web_socket.websocket.client_manipulator'
+        tags:
+            - { name: gos_web_socket.topic }
+
+    dondrekiel.periodic_dondrekiel_service:
+        class: DondrekielBundle\Periodic\DondrekielPeriodic
+        tags:
+            - { name: gos_web_socket.periodic }

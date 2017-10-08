@@ -1,0 +1,7 @@
+dondrekiel_rpc:
+    channel: dondrekiel/{method}
+    handler:
+        callback: 'dondrekiel.topic'
+    requirements:
+        method:
+            pattern: "[a-z_]+"

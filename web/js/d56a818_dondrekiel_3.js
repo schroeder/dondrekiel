@@ -16,11 +16,11 @@ $(document).ready(function () {
             console.log("Successfully Connected!");
 
             session.subscribe("dondrekiel/channel", function (uri, payload) {
-                $.notify("Received message: " + payload);
-                console.log("Received message: ", payload);
+                $.notify("Received message: " + payload.msg);
+                console.log("Received message: ", payload.msg);
             });
 
-            /*session.publish("dondrekiel/channel", "This is a message!");*/
+            session.publish("dondrekiel/channel", "This is a message!");
 
         })
 

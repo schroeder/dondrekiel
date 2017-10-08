@@ -1,0 +1,19 @@
+parameters:
+    database_host: localhost
+    database_port: ~
+    database_name: dondrekiel
+    database_user: dondrekiel_user
+    database_password: as1234df
+    # You should uncomment this if you want to use pdo_sqlite
+    #database_path: '%kernel.project_dir%/var/data/data.sqlite'
+
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: ~
+    mailer_password: ~
+
+    secret: ThisTokenIsNotSoSecretChangeIt
+
+    app_hostname: dev.app.dondrekiel.de
+    wss_enabled: 1
+    wss_port: 8081
