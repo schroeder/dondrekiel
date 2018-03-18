@@ -1,0 +1,67 @@
+{% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
+
+
+{#{% block page_title %}<a href="{{ path('team_new') }}" class="btn btn-primary">Create a new team</a>{% endblock %}#}
+{% block page_subtitle %}{% endblock %}
+{% block flash_messages %}{% endblock %}
+
+{% block page_content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Gruppenliste</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="group_list" class="table table-bordered table-striped dataTable" role="grid"
+                               aria-describedby="example1_info">
+                            <thead>
+                            <tr>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Id
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Passcode
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Status
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Grade
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Aktuelles Level
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for group in groups %}
+                                <tr>
+                                    <td>{{ group.id }}</td>
+                                    <td>{{ group.passcode }}</td>
+                                    <td>{{ group.status }}</td>
+                                    <td>{{ group.grade }}</td>
+                                    <td>{{ group.currentLevel }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script>$(document).ready(function(){$('#group_list').DataTable();});</script>
+{% endblock %}
+

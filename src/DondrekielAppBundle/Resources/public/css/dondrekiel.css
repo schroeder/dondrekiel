@@ -1,0 +1,10 @@
+#map {
+    width: 100%;
+    min-height: 500px;
+    background-image: url('/bundles/dondrekielapp/images/placeholder.png');
+
+}
+
+.map-container {
+    margin-top: 15px;
+}

@@ -1,31 +1,31 @@
 # Learn more about services, parameters and containers at
 # https://symfony.com/doc/current/service_container.html
 parameters:
-    #parameter_name: value
+    dondrekiel.user.provider.class: DondrekielAdminBundle\Repository\TeamRepository
+    dondrekiel.user.provider.entity.class: DondrekielAppBundle\Entity\Team
+    dondrekiel_admin.menu_listener.class: DondrekielAdminBundle\EventListener\AdminMenuItemListListener
+    dondrekiel_admin.twig_extension.class: DondrekielAdminBundle\Extensions\TwigExtensions
+    dondrekiel_admin.game.logger.class: DondrekielAdminBundle\Game\GameActionLogger
+    form.type.oh_google_maps.class: Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        # automatically injects dependencies in your services
-        autowire: true
-        # automatically registers your services as commands, event subscribers, etc.
-        autoconfigure: true
-        # this means you cannot fetch services directly from the container via $container->get()
-        # if you need to do this, you can override this setting on individual services
-        public: false
+
+    dondrekiel.action.logger:
+        class:        %dondrekiel_admin.game.logger.class%
+        arguments:     [ "@doctrine.orm.entity_manager" ]
 
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-    DondrekielBundle\:
-        resource: '../../src/DondrekielBundle/*'
+    DondrekielAppBundle\:
+        resource: '../../src/DondrekielAppBundle/*'
         # you can exclude directories or files
         # but if a service is unused, it's removed anyway
-        exclude: '../../src/DondrekielBundle/{Entity,Repository,Tests}'
+        exclude: '../../src/DondrekielAppBundle/{Entity,Repository,Tests}'
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services
-    DondrekielBundle\Controller\:
-        resource: '../../src/DondrekielBundle/Controller'
+    DondrekielAppBundle\Controller\:
+        resource: '../../src/DondrekielAppBundle/Controller'
         public: true
         tags: ['controller.service_arguments']
 
@@ -35,7 +35,7 @@ services:
     #         $someArgument: 'some_value'
 
     gos_web_socket_server.client_event.listener:
-        class: DondrekielBundle\EventListener\DondrekielEventListener
+        class: DondrekielAppBundle\EventListener\DondrekielEventListener
         tags:
             - { name: kernel.event_listener, event: 'gos_web_socket.client_connected', method: onClientConnect }
             - { name: kernel.event_listener, event: 'gos_web_socket.client_disconnected', method: onClientDisconnect }
@@ -57,3 +57,21 @@ services:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
         arguments: ['@pdo', {lock_mode: 0}]
 
+
+    dondrekiel.twig.extension:
+        class:        %dondrekiel_admin.twig_extension.class%
+        arguments:     [ "@doctrine.orm.entity_manager" ]
+        tags:
+            -  { name: twig.extension }
+
+    dondrekiel_admin.menu_listener:
+        class: %dondrekiel_admin.menu_listener.class%
+        tags:
+            - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
+
+
+    #form.type.oh_google_maps:
+    #  class: "%form.type.oh_google_maps.class%"
+      #arguments:     [ "%google_maps_api_key%" ]
+    #  tags:
+    #    - {name: "form.type", alias: "oh_google_maps"}

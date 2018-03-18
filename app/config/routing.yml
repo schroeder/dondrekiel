@@ -1,12 +1,28 @@
-app:
-    resource: '@DondrekielBundle/Controller/'
+dondrekiel_web:
+    host:   "{domain}"
+    requirements:
+        domain: "%dondrekiel.web_url%"
+    resource: "@DondrekielWebBundle/Resources/config/routing.yml"
+    prefix:   /
+
+dondrekiel_app:
+    host:   "{domain}"
+    requirements:
+        domain: "%dondrekiel.app_url%"
+    resource: '@DondrekielAppBundle/Controller/'
     type: annotation
+
+
+dondrekiel_admin:
+    resource: "@DondrekielAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
 
 users:
     type:     rest
     host:     "%app_hostname%"
-    resource: DondrekielBundle\Controller\StationController
-    prefix:   rest
+    resource: DondrekielAppBundle\Controller\StationController
+    prefix:   /rest
 
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"
@@ -26,4 +42,3 @@ fos_user_resetting:
 fos_user_change_password:
     resource: "@FOSUserBundle/Resources/config/routing/change_password.xml"
     prefix: /profile
-

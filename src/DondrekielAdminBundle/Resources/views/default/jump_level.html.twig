@@ -1,0 +1,72 @@
+{% extends 'DondrekielAdminBundle::base.html.twig' %}
+
+{% block playground %}
+    <div id="playground">
+        <div class="box">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h3 class="panel-title">Das nächste Level ruft!</h3></div>
+                <div class="panel-body">
+                    <div id="main">
+                        <div id="outdiv">
+                        </div>
+                        <div id="login_result">
+                            Sucht euch eine zweite Gruppe und scannt deren Karte hier ein!
+                        </div>
+                    </div>
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block infobox %}
+    <div id="info" class="panel panel-info">
+        <div class="panel-heading"><h3 class="panel-title">Hallo Team {{ team.id }}!</h3></div>
+        <div class="panel-body">
+            <p>Ihr seid <strong>{{ team.countMembers }}</strong> Leute in der Gruppe.</p>
+            {% if team.currentLevel %}
+                <p>Ihr spielt seit {{ level_info.level_duration }} Minuten in Level
+                    <strong>{{ team.currentLevel.name }}</strong>.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="welcome" class="panel panel-info">
+        <div class="panel-heading"><h3 class="panel-title">Eure Aktionen</h3></div>
+        <div class="panel-body">
+            <a href="{{ path('logout') }}" class="btn btn-primary btn-lg"
+               role="button">Abbrechen
+            </a>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+
+{% block javascript %}
+    <script>
+        $(document).ready(function () {
+            if ("{{ error_message }}" != false) {
+                showLoginErrorMessage("{{ error_message }}");
+                setTimeout(setDefaultText, 3000);
+            }
+
+        });
+        function load() {
+            if (isCanvasSupported() && window.File && window.FileReader) {
+                initCanvas(800, 600);
+                qrcode.callback = codeReadOnLevelJumpPage;
+                document.getElementById("main").style.display = "inline";
+                setwebcam();
+            }
+            else {
+                document.getElementById("main").style.display = "inline";
+                document.getElementById("main").innerHTML = '<p id="mp1">QR code scanner for HTML5 capable browsers</p><br>' +
+                    '<br><p id="mp2">sorry your browser is not supported</p><br><br>';
+            }
+        }
+
+        load();
+    </script>
+{% endblock %}

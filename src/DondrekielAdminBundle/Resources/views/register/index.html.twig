@@ -1,0 +1,107 @@
+{% extends 'DondrekielAdminBundle::register_base.html.twig' %}
+
+{% block register %}
+    <div id="playground">
+        <div class="jumbotron">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h3 class="panel-title">Registrierung!</h3></div>
+                <div class="panel-body">
+                    <div id="main">
+                        <div id="outdiv">
+                        </div>
+                        <div id="login_result" class="">
+                            Jetzt Teamkarte und Teilnehmerkarten scannen!
+                        </div>
+                    </div>
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block infobox %}
+    <div id="infobox">
+        <div class="jumbotron">
+            {% if team or team_id %}
+                {% set team_css = 'panel-success' %}
+            {% else %}
+                {% set team_css = 'panel-danger' %}
+            {% endif %}
+            <div id="team" class="panel {{ team_css }}">
+                <div class="panel-heading"><h3 class="panel-title">Euer Team</h3></div>
+                <div class="panel-body" id="team_id">
+                    {% if team %}
+                        {{ team.passcode }}
+                    {% else %}
+                        {% if team_id %}
+                            {{ team_id }}
+                        {% else %}
+                            Die Teamkarte fehlt noch!
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% if member_list|length < 3 %}
+                {% set team_css = 'panel-danger' %}
+            {% else %}
+                {% set team_css = 'panel-success' %}
+            {% endif %}
+            <div id="member" class="panel {{ team_css }}">
+                <div class="panel-heading"><h3 class="panel-title">Eure Mitglieder</h3></div>
+                <div class="panel-body">
+                    {% if member_list %}
+                        <ul id="member_list">
+                            {% for member in member_list %}
+                                <li>{{ member.fullname|e }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="action" class="panel panel-info">
+                <div class="panel-heading"><h3 class="panel-title">Aktionen</h3></div>
+                <div class="panel-body">
+                    <div id="finish"
+                         class="form-group{% if (member_list|length) >= 3 and (team or team_id) %}{% else %} hidden{% endif %}">
+                        <a href="{{ path('get_register', {'action': 'finish'}) }}" class="btn btn-success btn-lg"
+                           role="button">Registrierung abschliessen
+                        </a>
+                    </div>
+                    <div class="form-group">
+                        <a href="{{ path('cancel_registration') }}" class="btn btn-primary btn-lg"
+                           role="button">Abbrechen
+                        </a>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+    {% block javascript %}
+        <script>
+            $(document).ready(function () {
+                if ("{{ error_message }}" != false) {
+                    showLoginErrorMessage("{{ error_message }}");
+                    setTimeout(setDefaultText, 3000);
+                }
+            });
+
+            function load() {
+                if (isCanvasSupported() && window.File && window.FileReader) {
+                    initCanvas(800, 600);
+                    qrcode.callback = codeReadOnRegisterPage;
+                    document.getElementById("main").style.display = "inline";
+                    setwebcam();
+                }
+                else {
+                    document.getElementById("main").style.display = "inline";
+                    document.getElementById("main").innerHTML = '<p id="mp1">QR code scanner for HTML5 capable browsers</p><br>' +
+                        '<br><p id="mp2">sorry your browser is not supported</p><br><br>';
+                }
+            }
+        </script>
+    {% endblock %}

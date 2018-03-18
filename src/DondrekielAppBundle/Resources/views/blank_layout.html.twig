@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}Dondrekiel App{% endblock %}</title>
+    {% stylesheets
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
+    '@DondrekielAppBundle/Resources/public/css/dondrekiel.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+    {% endstylesheets %}
+</head>
+<body>
+
+
+<div class="container map-container">
+    {% block fos_user_content %}{% endblock %}
+</div>
+
+
+{% javascripts
+'%kernel.root_dir%/../vendor/components/jquery/jquery.js'
+'%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js' %}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+{% extends 'DondrekielAdminBundle::gameadmin_base.html.twig' %}
+
+{% block login %}
+    <div id="playground">
+        <div class="jumbotron">
+            <div class="panel panel-warning">
+                <div class="panel-heading"><h3 class="panel-title">{{ game.name }}</h3></div>
+                <div class="panel-body">
+                    <div id="main">
+                        <div id="outdiv">
+                        </div>
+                        <div id="gameadmin_result">
+                            Ok, das Spiel kann nun gestartet werden!<br>
+
+                            <a href="/gameadmin/won" class="btn btn-success" role="button">Erfolgreich gespielt!</a>
+                            <a href="/gameadmin" class="btn btn-info" role="button">Abbrechen</a>
+
+                        </div>
+                    </div>
+                    <canvas id="qr-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

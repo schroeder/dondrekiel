@@ -1,0 +1,21 @@
+{% extends 'DondrekielAdminBundle::base.html.twig' %}
+
+{% block playground %}
+    <div id="playground" class="box">
+        <div class="panel panel-success">
+            <div class="panel-heading"><h3 class="panel-title">Ihr habt eure Aufgabe erfüllt!</h3></div>
+            <div class="panel-body">
+                <div class="row">
+                    <h2>Herzlichen Glückwunsch!</h2>
+                    <h2>Ihr habt euren Teil dazu beigetragen, dass wir die Zukunft ein wenig besser gemacht haben!</h2>
+                    <p>Habt noch eine schöne Zeit bis zum Gottesdienst!</p>
+                    <p><strong>Geht schwimmen, trinkt viel, kühlt euch ab!</strong></p>
+                    <p>Wir sehen uns dann in Kluft im Zirkuszelt!</p>
+                    <p>
+                        <a href="{{ path('dondrekiel') }}" class="btn btn-primary btn-lg" role="button">OK</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

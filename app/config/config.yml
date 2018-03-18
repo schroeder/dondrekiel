@@ -2,6 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
+    - { resource: "@DondrekielWebBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -37,9 +38,16 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         app_hostname: "%app_hostname%"
-        wss_enabled: %wss_enabled%
-        wss_port: %wss_port%
+        wss_enabled: "%wss_enabled%"
+        wss_port: "%wss_port%"
+    paths:
+        '%kernel.root_dir%/../src/DondrekielAdminBundle/Resources/views/': DondrekielAdminBundle
+    globals:
+        avanzu_adminlte_close_alert: true # default is false
+        admin_skin: skin-red
 
+    form_themes:
+        - 'OhGoogleMapFormTypeBundle:Form:fields.html.twig'
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -74,7 +82,7 @@ swiftmailer:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ 'DondrekielBundle' ]
+    bundles:        [ 'DondrekielAppBundle', 'DondrekielWebBundle', 'OhGoogleMapFormTypeBundle' ]
 
     filters:
         cssrewrite: ~
@@ -82,37 +90,17 @@ assetic:
         bootstrap_js:
             inputs:
                 - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
-                - '@DondrekielBundle/Resources/public/js/dondrekiel.js'
+                - '@DondrekielAppBundle/Resources/public/js/dondrekiel.js'
         bootstrap_css:
             inputs:
                 - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
-                - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap-theme.css'
-                - '@DondrekielBundle/Resources/public/css/dondrekiel.css'
-
-            #filters: [cssrewrite]
-
-        bootstrap_glyphicons_ttf:
-            inputs:
-                - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf'
-            output: "fonts/glyphicons-halflings-regular.ttf"
-        bootstrap_glyphicons_eot:
-            inputs:
-                - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.eot'
-            output: "fonts/glyphicons-halflings-regular.eot"
-        bootstrap_glyphicons_svg:
-            inputs:
-                - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
-            output: "fonts/glyphicons-halflings-regular.svg"
-        bootstrap_glyphicons_woff:
-            inputs:
-                - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/fonts/glyphicons-halflings-regular.woff'
-            output: "fonts/glyphicons-halflings-regular.woff"
+                - '@DondrekielAppBundle/Resources/public/css/dondrekiel.css'
 
         jquery:
             inputs:
                 - '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
                 - '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
-                - '@DondrekielBundle/Resources/public/js/dondrekiel.js'
+                - '@DondrekielAppBundle/Resources/public/js/dondrekiel.js'
 
 fos_rest:
     view:
@@ -130,10 +118,10 @@ fos_rest:
 gos_web_socket:
     server:
         port: 8888
-        host: %app_hostname%
+        host: "%app_hostname%"
         router:
             resources:
-                - '@DondrekielBundle/Resources/config/rpc/routing.yml'
+                - '@DondrekielAppBundle/Resources/config/rpc/routing.yml'
     client:
         firewall: main #secured_area #can be an array of firewalls
         session_handler: '@session.handler.pdo'
@@ -146,7 +134,37 @@ gos_web_socket:
 fos_user:
     db_driver: orm
     firewall_name: main
-    user_class: DondrekielBundle\Entity\Team
+    user_class: DondrekielAppBundle\Entity\Team
     from_email:
         address:        "info@dondrekiel.de"
         sender_name:    "Dondrekiel"
+
+doctrine_phpcr:
+   # configure the PHPCR session
+   session:
+       backend: "%phpcr_backend%"
+       workspace: "%phpcr_workspace%"
+       username: "%phpcr_user%"
+       password: "%phpcr_pass%"
+   # enable the ODM layer
+   odm:
+       auto_mapping: true
+       auto_generate_proxy_classes: "%kernel.debug%"
+
+cmf_routing:
+    chain:
+        routers_by_id:
+            cmf_routing.dynamic_router: 200
+            router.default: 100
+    dynamic:
+        enabled: true
+        persistence:
+            phpcr: true
+
+cmf_routing_auto:
+    persistence:
+        phpcr:
+            enabled: true
+
+oh_google_map_form_type:
+    api_key: "%google_maps_api_key%"

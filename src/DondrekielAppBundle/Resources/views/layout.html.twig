@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %}Dondrekiel App{% endblock %}</title>
+    {% stylesheets
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
+    '@DondrekielAppBundle/Resources/public/css/dondrekiel.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+    {% endstylesheets %}
+</head>
+<body>
+
+{{ include('DondrekielAppBundle::/parts/navigation.html.twig') }}
+
+
+<div class="container map-container">
+    {% block body %}{% endblock %}
+
+    <script type="text/javascript">
+        var app_hostname = "{{ app_hostname }}";
+        var wss_enabled = {{ wss_enabled }};
+        var wss_port = {{ wss_port }};
+        var team_id = "{{ app.user.username }}";
+    </script>
+
+    {% if wss_enabled %}
+        {{ ws_client() }}
+    {% endif %}
+
+
+    {% javascripts
+    '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
+    '@DondrekielAppBundle/Resources/public/js/lib/push_notification.min.js'
+    '@DondrekielAppBundle/Resources/public/js/dondrekiel.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk&callback=initMap">
+    </script>
+
+</body>
+</html>

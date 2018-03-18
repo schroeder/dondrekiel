@@ -1,0 +1,51 @@
+{% extends 'DondrekielAdminBundle::joker_base.html.twig' %}
+
+{% block playground %}
+    <div class="panel panel-info">
+        <div class="panel-heading"><h1 class="panel-title">Herzlichen Glückwunsch!</h1></div>
+        <div class="panel-body">
+            <h2>Du hast es geschafft!</h2>
+            <p>Du bist nun am Ziel der Pack's-An-Internet-Schnitzeljagd angelangt.</p>
+            <p>Als Belohnung bekommst du einen Joker, den du mit deinem Team einmal im großen Pack's-An-Spiel einsetzen
+                kannst.</p>
+            <a href="{{ path('getajoker') }}" target="_blank" class="btn btn-success">Hier geht es zu deinem Joker!</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block infobox %}
+    <div id="infobox">
+        <div id="info" class="panel panel-danger">
+            <div class="panel-heading"><h3 class="panel-title">Hinweis für alle</h3></div>
+            <div class="panel-body">
+                <p>Es reicht, wenn du dir einen Joker ausdruckst!</p>
+                <p>Jedes Team kann im Spiel nur einen Joker einsetzen! Darum hilft es dir nicht, wenn du mehrere
+                    ausdruckst.</p>
+            </div>
+        </div>
+        <div id="info" class="panel panel-warning">
+            <div class="panel-heading"><h3 class="panel-title">Hinweis für Gruppen</h3></div>
+            <div class="panel-body">
+                <p>Wenn ihr mit mehreren Leuten die Pack's-An-Internet-Schnitzeljagd gemeistert habt, freut uns das
+                    sehr! Und
+                    alle von euch haben sich auch einen Joker verdient.
+                </p>
+                <p>Allerdings kann jeder Joker nur einmal verwendet werden. Darum klappt es nicht, wenn ihr den
+                    Joker mehrmals ausdruckt.</p>
+                <p>Bitte ruft den Joker-Generieren-Link mehrmals auf, damit jeder von euch einen eigenen Joker
+                    hat.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block leftcol %}
+    <div id="infobox" class="hidden-xs hidden-sm">
+        <div id=" info" class="panel panel-success">
+            <div class="panel-heading"><h3 class="panel-title">Pack's An</h3></div>
+            <div class="panel-body">
+                <img src="/bundles/dondrekielspiel/images/logo_gross.png" width="100%"/>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'Coming Soon';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/ComingSoon.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/RobotoSlab-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 700;
+    src: url('../fonts/RobotoSlab-Bold.ttf');
+}
+
+body {
+    font-family: 'Roboto Slab';
+    position: absolute;
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+.fill {
+    background-color: #eeeeec;
+    margin: 5px;
+    border: 2px solid #babdb6;
+    min-height: 98%;
+}
+
+.box {
+    margin: 10px;
+}
+
+#logo {
+    background: none;
+    border: none;
+    border-bottom: 2px solid #ccccc5;
+}
+
+#v, #qr-canvas {
+    display: none;
+}
+
+#login_result, #gameadmin_result {
+    font-size: 75px;
+    text-align: center;
+}
+
+#playground .panel-title {
+    font-size: 60px;
+}
+
+.panel-heading {
+    font-family: 'Coming Soon';
+}
+
+.btn-lg {
+    line-height: 2.333333;
+    width: 100%;
+}
+
+.game-subject:active, .game-subject:focus {
+    background-color: #4e9a06 !important;
+    color: #eeeeec;
+}
+
+.joker-page {
+    margin-top: 20px;
+}
+
+.joker-page p {
+    font-size: 14px;
+}
+
+.joker-page h3 {
+    font-size: 14px;
+}
+
+.joker-page .panel-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.btn-group .btn.game-subject {
+    height: 250px;
+    width: 47%;
+}
+
+.btn-group > .btn.game-subject:first-child:not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn.game-subject:not(:first-child):not(:last-child):not(.dropdown-toggle),
+.btn-group > .btn.game-subject:last-child:not(:first-child), .btn-group > .dropdown-toggle:not(:first-child) {
+    background-color: #888a85;
+    width: 47%;
+    margin: 10px;
+    height: 250px;
+    border-radius: 6px !important;
+    font-size: 31px;
+    font-weight: 200;
+}
+
+.game-status-running {
+    background-color: #aa0000;
+}
+
+.alert {
+    margin: 5px;
+    font-size: 31px;
+    font-weight: 200;
+}
+
+#gameadmin_result a.btn {
+    font-size: 44px;
+    min-width: 200px;
+}
+
+.btn-group-justified > span.btn {
+    display: block;
+    height: 50%;
+    float: left;
+}

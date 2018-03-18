@@ -1,0 +1,94 @@
+{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+
+{% block title %}
+    Dondrekiel
+{% endblock %}
+
+{% block page_title %}Team Passcode Generieren
+{% endblock %}
+{% block page_subtitle %}
+{% endblock %}
+
+{% block flash_messages %}
+    Test
+{% endblock %}
+
+
+{% block page_content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Teamliste</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="example1" class="table table-bordered table-striped dataTable" role="grid"
+                               aria-describedby="example1_info">
+                            <thead>
+                            <tr role="row">
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Browser: activate to sort column ascending" style="width: 361px;">
+                                    Passcode
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Level
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Engine version: activate to sort column ascending"
+                                    style="width: 256px;">Status
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    style="width: 190px;">
+                                    Aktionen
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for team in team_list %}
+                                <tr role="row"
+                                    class="{% if loop.index is divisibleby(2) %}even{% else %}odd{% endif %}">
+                                    <td>{{ team.passcode }}</td>
+                                    <td>{% if team.currentLevel %}{{ team.currentLevel.name }}{% endif %}</td>
+                                    <td>{{ team.status }}</td>
+                                    <td>
+                                        <a role="button" class="btn btn-info"
+                                           href="{{ path('admin_generate_team_passcode', {'id': team.id }) }}">
+                                            <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th rowspan="1" colspan="1">Passcode</th>
+                                <th rowspan="1" colspan="1">Level</th>
+                                <th rowspan="1" colspan="1">Status</th>
+                                <th rowspan="1" colspan="1">Aktionen</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">
+                            Zeige {{ limit }} von {{ total_count }} Eintr&auml;gen
+                        </div>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
+                            {{ knp_pagination_render(team_list) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+    </div>
+{% endblock %}

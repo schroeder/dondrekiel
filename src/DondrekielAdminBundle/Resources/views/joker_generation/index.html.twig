@@ -1,0 +1,44 @@
+{% extends 'DondrekielAdminBundle::joker_base.html.twig' %}
+
+{% block playground %}
+    <div class="panel panel-info">
+        <div class="panel-heading"><h1 class="panel-title">Nur noch eine Letzte Frage!</h1></div>
+        <div class="panel-body">
+            <p>Wie lautet die Antwort auf die Frage nach dem Leben, dem Universums und dem ganzen
+                Rest?</p>
+            {% if error_message != false %}
+                <div class="alert alert-danger" role="alert">{{ error_message }}</div>
+            {% endif %}
+            <form action="{{ path('requestajoker') }}" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="answer" name="answer" placeholder="Meine Antwort">
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="Submit" value="Richtig?" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block infobox %}
+    <div id="infobox">
+        <div id="info" class="panel panel-success">
+            <div class="panel-heading"><h3 class="panel-title">Dondrekiel</h3></div>
+            <div class="panel-body">
+                <img src="/bundles/dondrekielspiel/images/logo_gross.png"/>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block leftcol %}
+    <div id="infobox" class="hidden-xs hidden-sm">
+        <div id="info" class="panel panel-success">
+            <div class="panel-heading"><h3 class="panel-title">Dondrekiel</h3></div>
+            <div class="panel-body">
+                <img src="/bundles/dondrekielspiel/images/logo_gross.png" width="100%"/>
+            </div>
+        </div>
+    </div>
+{% endblock %}

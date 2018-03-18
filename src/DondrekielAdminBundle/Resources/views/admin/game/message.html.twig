@@ -1,0 +1,26 @@
+{% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
+
+{% block page_title %}Spiel-Nachricht senden{% endblock %}
+{% block flash_messages %}{% endblock %}
+
+{% block page_content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Nachricht schreiben</h3>
+        </div>
+        {{ form_start(form, {'method': 'POST'}) }}
+        <div class="box-body">
+            <div class="form-group">
+                {{ form_widget(form.gameId, { 'attr': {'placeholder': 'Spiel ID Eingeben', 'style': 'margin-bottom: 1em;'} }) }}
+                {{ form_errors(form.gameId) }}
+
+                {{ form_widget(form.messageText, { 'attr': {'placeholder': 'Nachricht Eingeben'} }) }}
+                {{ form_errors(form.messageText) }}
+            </div>
+        </div>
+        <div class="box-footer">
+            {{ form_widget(form.save, { 'attr': {'class': 'btn btn-info pull-right'} }) }}
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'DondrekielAppBundle::layout.html.twig' %}
+
+{% block title %}Dondrekiel 2018{% endblock %}
+
+{% block body %}
+    <div class="card">
+
+        <div id="map">
+        </div>
+
+        <div class="modal-body">
+            <div class="card-content clearfix">
+                {{ app.user.username }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header card-header-title">
+                    <h4 class="modal-title card-element-title" id="modalHeader"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-content clearfix" id="modalContent">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
+
+{% block page_title %}Neues Spiel{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block flash_messages %}{% endblock %}
+
+{% block page_content %}
+
+    {{ tinymce_init() }}
+
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Neues Spiel</h3>
+
+                    <div class="box-body">
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        <input type="submit" value="Create"/>
+                        {{ form_end(form) }}
+
+                        <div class="box-footer">
+                            <a href="{{ path('game_index') }}">Zur&uuml;ck zur Liste</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-danger">
+                <div class="box-header with-border">
+                    <h3 class="box-title"></h3>
+
+                    <div class="box-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+

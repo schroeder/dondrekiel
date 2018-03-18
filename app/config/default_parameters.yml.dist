@@ -17,3 +17,8 @@ parameters:
     app_hostname: dev.app.dondrekiel.de
     wss_enabled: 1
     wss_port: 8081
+
+    dondrekiel.web_url: dev.web.dondrekiel.de
+    dondrekiel.app_url: dev.app.dondrekiel.de
+
+    google_maps_api_key: AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk

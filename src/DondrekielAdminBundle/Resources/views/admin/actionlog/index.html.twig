@@ -1,0 +1,84 @@
+{% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
+
+{% block page_title %}Logbuch{% endblock %}
+{% block page_subtitle %}{% endblock %}
+{% block flash_messages %}{% endblock %}
+
+{% block page_content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Neueste Einträge:</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+
+            {{ form_start(form, {'method': 'POST'}) }}
+                <div class="col-xs-3">
+                    {{ form_widget(form.gameId, { 'attr': {'placeholder': 'Filter by Game ID'} }) }}
+                    {{ form_errors(form.gameId) }}
+                </div>
+                <div class="col-xs-3">
+                    {{ form_widget(form.teamId, { 'attr': {'placeholder': 'Filter by Group ID'} }) }}
+                    {{ form_errors(form.teamId) }}
+                </div>
+                <div class="col-xs-3">
+                    {{ form_widget(form.logLevel) }}
+                    {{ form_errors(form.logLevel) }}
+                </div>
+                <div class="col-xs-3">
+                    {{ form_widget(form.submit, { 'attr': {'class': 'btn btn-info pull-right'} }) }}
+                </div>
+            {{ form_end(form) }}
+
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap" style="margin-top: 4em;">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="actionlog" class="table table-bordered table-striped dataTable" role="grid"
+                               aria-describedby="example1_info">
+                            <thead>
+                            <tr>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Zeitstempel
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Spiel
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Gruppe
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Log-Eintrag
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Log-Level
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for entry in logs %}
+                                <tr>
+                                    <td>{{ entry.timestamp }}</td>
+                                    <td>{{ entry.game }}</td>
+                                    <td>{{ entry.group }}</td>
+                                    <td>{{ entry.text }}</td>
+                                    <td>{{ entry.loglvl }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts_inline %}
+    <script>$(document).ready(function(){$('#actionlog').DataTable();});</script>
+{% endblock %}

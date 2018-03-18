@@ -1,0 +1,33 @@
+<h1 class="box-title">Spiel "{{ game.name }}"</h1>
+
+<table border="0" align="left" width="100%">
+    <tbody>
+    <tr>
+        <td>Id</td>
+        <td>{{ game.id }}</td>
+    </tr>
+    <tr>
+        <td>Themenbereich</td>
+        <td>{{ game.gameSubject }}</td>
+    </tr>
+    <tr>
+        <td>Level</td>
+        <td>{{ game.level }}</td>
+    </tr>
+    <tr>
+        <td>Geplante Dauer</td>
+        <td>{{ game.duration }}</td>
+    </tr>
+    <tr>
+        <td>Beschreibung</td>
+        <td>{{ game.description }}</td>
+    </tr>
+    <tr>
+        <td>Ort</td>
+        <td>{{ game.location }}</td>
+    </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+
+{{ game.gameDescription|raw }}
