@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Twig_Environment as TwigEnvironment;
 
+
 class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
 {
     /**
@@ -153,6 +154,11 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
         $topic->broadcast([
             'msg' => $event,
         ]);
+
+        /** @var ConnectionInterface $client * */
+        foreach ($topic as $client) {
+            var_dump($client);
+        }
     }
 
     /**

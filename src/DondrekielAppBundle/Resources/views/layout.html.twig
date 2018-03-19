@@ -24,13 +24,17 @@
         var app_hostname = "{{ app_hostname }}";
         var wss_enabled = {{ wss_enabled }};
         var wss_port = {{ wss_port }};
-        var team_id = "{{ app.user.username }}";
+        var team_id = "{{ app.user.id }}";
     </script>
 
     {% if wss_enabled %}
         {{ ws_client() }}
     {% endif %}
 
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk&callback=initMap">
+    </script>
 
     {% javascripts
     '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
@@ -39,10 +43,6 @@
     '@DondrekielAppBundle/Resources/public/js/dondrekiel.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk&callback=initMap">
-    </script>
 
 </body>
 </html>

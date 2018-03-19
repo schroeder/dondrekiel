@@ -23,7 +23,7 @@ class TeamController extends FOSRestController
     }
 
     /**
-     * @Route("/rest/team/info/{id}", name="rest_get_team_info") requirements = {"id" = "\d+"}
+     * @Route("/rest/team/info/{id}", name="rest_get_team_info") requirements = {"id" = "\s+"}
      */
     public function getTeamInfoAction($id)
     {
@@ -40,7 +40,8 @@ class TeamController extends FOSRestController
         $team = $teamRepository->find($id);
 
         $teamInfo = [
-            "id" => $team->getId()
+            "id" => $team->getId(),
+            "login" => $team->getUsername()
         ];
 
         $teamInfoHtml = $this->render('DondrekielAppBundle:team:info.html.twig', ['team' => $teamInfo]);

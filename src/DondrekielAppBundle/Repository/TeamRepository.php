@@ -25,7 +25,7 @@ class TeamRepository extends EntityRepository implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        return $this->findOneByPasscode($username);
+        return $this->findOneByUsername($username);
     }
 
     /**

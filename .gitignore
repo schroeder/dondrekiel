@@ -16,6 +16,7 @@
 /vendor/
 /web/bundles/
 /web/
+/var/
 /.idea
 /log
 /app/config/parameters.yml.dist
