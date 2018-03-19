@@ -55,38 +55,6 @@ function errorCallback(error) {
 }
 
 function initMap() {
-    if (map === undefined) {
-        var mystyles = [
-            {
-                featureType: "poi",
-                elementType: "labels",
-                stylers: [
-                    {visibility: "off"}
-                ]
-            }
-        ];
-
-        var lat = 51.947516099999994;
-        var lng = 7.660348699999998;
-        if (typeof position != 'undefined') {
-            lat = position.coords.latitude;
-            lng = position.coords.longitude;
-        }
-        map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 14,
-            center: {lat: lat, lng: lng},
-            disableDefaultUI: true,
-            mapTypeId: 'terrain',
-            styles: mystyles
-        });
-
-        google.maps.event.addListener(map, 'click', function (event) {
-            if (selfMarker !== undefined) {
-                selfMarker.setPosition(event.latLng);
-            }
-        });
-    }
-
     var jqxhr = $.get("/rest/station", function (stations) {
     })
         .done(function (stations) {
@@ -134,6 +102,32 @@ function successCallback(position) {
                 longitude: position.coords.longitude,
                 latitude: position.coords.latitude,
                 team: team_id
+            }
+        });
+    }
+
+    if (map === undefined) {
+        var mystyles = [
+            {
+                featureType: "poi",
+                elementType: "labels",
+                stylers: [
+                    {visibility: "off"}
+                ]
+            }
+        ];
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 14,
+            center: {lat: position.coords.latitude, lng: position.coords.longitude},
+            disableDefaultUI: true,
+            mapTypeId: 'terrain',
+            styles: mystyles
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            if (selfMarker !== undefined) {
+                selfMarker.setPosition(event.latLng);
             }
         });
     }
