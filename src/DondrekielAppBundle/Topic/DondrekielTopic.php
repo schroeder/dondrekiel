@@ -134,7 +134,6 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     {
         /* @var Team $currentTeam */
         $currentTeam = $this->securityTokenStorage->getToken()->getUser();
-
         /* @var Team $currentTeam */
         $currentTeam = $this->teamRepository->find($currentTeam->getId());
 
@@ -157,7 +156,6 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
 
         /** @var ConnectionInterface $client * */
         foreach ($topic as $client) {
-            var_dump($client);
         }
     }
 

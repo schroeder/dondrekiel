@@ -31,11 +31,6 @@
         {{ ws_client() }}
     {% endif %}
 
-
-    <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk&callback=initMap">
-    </script>
-
     {% javascripts
     '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
     '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
@@ -43,6 +38,11 @@
     '@DondrekielAppBundle/Resources/public/js/dondrekiel.js' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk&callback=initMap">
+    </script>
+
 
 </body>
 </html>
