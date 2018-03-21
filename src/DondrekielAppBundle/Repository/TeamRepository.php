@@ -28,6 +28,22 @@ class TeamRepository extends EntityRepository implements UserProviderInterface
         return $this->findOneByUsername($username);
     }
 
+    public function getAllActiveTeams()
+    {
+        $result = $this->_em->createQuery("SELECT t.id AS team_id, t.username AS username, p1.locationLng AS location_lng, p1.locationLat AS location_lat FROM DondrekielAppBundle\Entity\Team t, DondrekielAppBundle\Entity\Position p1 WHERE t.id=p1.team AND p1.timestamp=(SELECT MAX(p2.timestamp) FROM DondrekielAppBundle\Entity\Position p2 WHERE p2.team=p1.team)")
+            ->execute();
+
+        if (count($result)) {
+            return $result;
+        }
+        return false;
+    }
+
+    /*
+ * SELECT p1.*, t.* FROM team t, position p1 WHERE t.id=p1.team_id AND p1.timestamp= (SELECT MAX(p2.timestamp) FROM position p2 WHERE p2.team_id=p1.team_id);
+ * */
+
+
     /**
      * Refreshes the user for the account interface.
      *

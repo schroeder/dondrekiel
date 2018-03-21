@@ -2,6 +2,7 @@ var map;
 var websocket;
 var websocketSession;
 var selfMarker;
+var teamList = [];
 
 $(document).ready(function () {
 
@@ -83,13 +84,52 @@ function initMap() {
                         });
                 });
             }
+            console.log("Initialized all stations");
 
         })
         .fail(function () {
             console.log("Error initializing stations!");
+        });
+
+
+    var jqxht = $.get("/rest/team", function (result) {
+    })
+        .done(function (result) {
+            if (result["result"] == true) {
+                var teams = result["teams"];
+                for (var key in teams) {
+                    console.log("Team: " + teams[key].team_id);
+
+                    //teamList = teamList.concat([teams[key].team_id = > teams[key]);
+
+                    teamMarker = new google.maps.Marker({
+                        id: teams[key].team_id,
+                        label: "",
+                        map: map,
+                        icon: "/bundles/dondrekielapp/images/red_marker.png",
+                        position: {lat: teams[key].location_lat, lng: teams[key].location_lng}
+                    });
+                    google.maps.event.addListener(teamMarker, 'click', function () {
+
+                        var jqxhr = $.get("/rest/team/info/" + this.id, function (info) {
+                        })
+                            .done(function (info) {
+                                $('#modalHeader').html("Team " + info.id);
+                                $('#modalContent').html(info.description);
+                                $('#myModal').modal(options);
+
+                            })
+                            .fail(function () {
+                                console.log("Error getting team info!");
+                            });
+                    });
+                }
+
+            }
+            console.log("Initialized all teams");
         })
-        .always(function (stations) {
-            console.log("Initialized all stations");
+        .fail(function () {
+            console.log("Error initializing teams!");
         });
 }
 

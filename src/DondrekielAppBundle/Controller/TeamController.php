@@ -17,9 +17,16 @@ class TeamController extends FOSRestController
      */
     public function getTeamAction()
     {
-        /*
-         * SELECT p1.*, t.* FROM team t, position p1 WHERE t.id=p1.team_id AND p1.timestamp= (SELECT MAX(p2.timestamp) FROM position p2 WHERE p2.team_id=p1.team_id);
-         * */
+        $doctrine = $this->getDoctrine();
+        /* @var TeamRepository $teamRepository */
+        $teamRepository = $doctrine->getRepository("DondrekielAppBundle:Team");
+
+        $teams = $teamRepository->getAllActiveTeams();
+        if (count($teams)) {
+            return new JsonResponse(["result" => true, "teams" => $teams]);
+        } else {
+            return new JsonResponse(["result" => false, "error" => "No data found."]);
+        }
     }
 
     /**
