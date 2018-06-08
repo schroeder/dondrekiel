@@ -41,6 +41,13 @@ class Team extends BaseUser
     private $status;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string")
+     */
+    private $name;
+
+    /**
      * @var Collection
      *
      * @OneToMany(targetEntity="Actionlog", mappedBy="team", cascade={"persist", "remove", "merge"}, orphanRemoval=true, mappedBy="logEntries")
@@ -87,7 +94,7 @@ class Team extends BaseUser
 
     public function getRoles()
     {
-        return array('ROLE_TEAM');
+        return $this->roles;
     }
 
     /**
@@ -100,6 +107,30 @@ class Team extends BaseUser
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return integer
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set name
+     *
+     * @param int $name
+     *
+     * @return Team
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
 
         return $this;
     }

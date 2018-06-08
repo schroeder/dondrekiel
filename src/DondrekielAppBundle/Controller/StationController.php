@@ -17,7 +17,8 @@ class StationController extends FOSRestController
      */
     public function getStationAction()
     {
-        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) {
+        if ((false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) &&
+            (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))) {
             return new JsonResponse(["error" => "not allowed"]);
         }
 
@@ -35,6 +36,7 @@ class StationController extends FOSRestController
                 "id" => $stationObject->getId(),
                 "name" => $stationObject->getName(),
                 "identifier" => $stationObject->getIdentifier(),
+                "status" => $stationObject->getStatus(),
                 "description" => $stationObject->getDescription(),
                 "location" => [
                     "latitude" => $stationObject->getLocationLat(),
@@ -51,7 +53,8 @@ class StationController extends FOSRestController
      */
     public function getStationInfoAction($id)
     {
-        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) {
+        if ((false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) &&
+            (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))) {
             return new JsonResponse(["error" => "not allowed"]);
         }
 
@@ -67,6 +70,7 @@ class StationController extends FOSRestController
             "id" => $station->getId(),
             "name" => $station->getName(),
             "identifier" => $station->getIdentifier(),
+            "status" => $station->getStatus(),
             "description" => $station->getDescription(),
             "location" => [
                 "latitude" => $station->getLocationLat(),

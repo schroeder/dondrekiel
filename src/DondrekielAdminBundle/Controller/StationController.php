@@ -19,23 +19,23 @@ use DondrekielAppBundle\Entity\Station;
 /**
  * Game controller.
  *
- * @Route("admin/game")
+ * @Route("/stations")
  */
-class GameController extends Controller
+class StationController extends Controller
 {
     /**
      * Lists all game entities.
      *
-     * @Route("/", name="game_index")
+     * @Route("/", name="station_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $games = $em->getRepository('DondrekielAppBundle:Game')->findAll();
+        $games = $em->getRepository('DondrekielAppBundle:Station')->findAll();
 
-        return $this->render('DondrekielAdminBundle::admin/game/index.html.twig', array(
+        return $this->render('DondrekielAdminBundle::admin/station/index.html.twig', array(
             'games' => $games,
         ));
     }
@@ -48,13 +48,13 @@ class GameController extends Controller
      */
     public function todoAction()
     {
-        return $this->render('DondrekielAdminBundle::admin/game/todo.html.twig', array());
+        return $this->render('DondrekielAdminBundle::admin/station/todo.html.twig', array());
     }
 
     /**
      * Creates a new game entity.
      *
-     * @Route("/new", name="game_new")
+     * @Route("/new", name="station_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -68,10 +68,10 @@ class GameController extends Controller
             $em->persist($game);
             $em->flush($game);
 
-            return $this->redirectToRoute('game_show', array('id' => $game->getId()));
+            return $this->redirectToRoute('station_show', array('id' => $game->getId()));
         }
 
-        return $this->render('DondrekielAdminBundle::admin/game/new.html.twig', array(
+        return $this->render('DondrekielAdminBundle::admin/station/new.html.twig', array(
             'game' => $game,
             'form' => $form->createView(),
         ));
@@ -80,7 +80,7 @@ class GameController extends Controller
     /**
      * Sends a message to a Game.
      *
-     * @Route("/send", name="game_message")
+     * @Route("/send", name="station_message")
      */
     public function sendMessageAction(Request $request)
     {
@@ -109,7 +109,7 @@ class GameController extends Controller
             $em->flush($message);
         }
 
-        return $this->render('DondrekielAdminBundle::admin/game/message.html.twig', array(
+        return $this->render('DondrekielAdminBundle::admin/station/message.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -117,14 +117,14 @@ class GameController extends Controller
     /**
      * Finds and displays a game entity.
      *
-     * @Route("/{id}", name="game_show")
+     * @Route("/{id}", name="station_show")
      * @Method("GET")
      */
     public function showAction(Station $game)
     {
         $deleteForm = $this->createDeleteForm($game);
 
-        return $this->render('DondrekielAdminBundle::admin/game/show.html.twig', array(
+        return $this->render('DondrekielAdminBundle::admin/station/show.html.twig', array(
             'game' => $game,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -133,7 +133,7 @@ class GameController extends Controller
     /**
      * Displays a form to edit an existing game entity.
      *
-     * @Route("/{id}/edit", name="game_edit")
+     * @Route("/{id}/edit", name="station_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Station $game)
@@ -145,10 +145,10 @@ class GameController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('game_edit', array('id' => $game->getId()));
+            return $this->redirectToRoute('station_edit', array('id' => $game->getId()));
         }
 
-        return $this->render('DondrekielAdminBundle::admin/game/edit.html.twig', array(
+        return $this->render('DondrekielAdminBundle::admin/station/edit.html.twig', array(
             'game' => $game,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -158,12 +158,12 @@ class GameController extends Controller
     /**
      * Displays a form to edit an existing game entity.
      *
-     * @Route("/{id}/export", name="game_export")
+     * @Route("/{id}/export", name="station_export")
      * @Method({"GET", "POST"})
      */
     public function exportAction(Request $request, Station $game)
     {
-        $html = $this->render('DondrekielAdminBundle::admin/game/export.html.twig', array(
+        $html = $this->render('DondrekielAdminBundle::admin/station/export.html.twig', array(
             'game' => $game));
 
         $input = new StringInput();
@@ -190,7 +190,7 @@ class GameController extends Controller
     /**
      * Deletes a game entity.
      *
-     * @Route("/{id}", name="game_delete")
+     * @Route("/{id}", name="station_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Station $game)
@@ -204,7 +204,7 @@ class GameController extends Controller
             $em->flush($game);
         }
 
-        return $this->redirectToRoute('game_index');
+        return $this->redirectToRoute('station_index');
     }
 
     /**
@@ -217,7 +217,7 @@ class GameController extends Controller
     private function createDeleteForm(Station $game)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('game_delete', array('id' => $game->getId())))
+            ->setAction($this->generateUrl('station_delete', array('id' => $game->getId())))
             ->setMethod('DELETE')
             ->getForm();
     }

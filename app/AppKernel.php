@@ -26,10 +26,8 @@ class AppKernel extends Kernel
             new Symfony\Cmf\Bundle\RoutingAutoBundle\CmfRoutingAutoBundle(),
             new Avanzu\AdminThemeBundle\AvanzuAdminThemeBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
-            new Oh\GoogleMapFormTypeBundle\OhGoogleMapFormTypeBundle(),
             new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
             new DondrekielAppBundle\DondrekielAppBundle(),
-            new DondrekielWebBundle\DondrekielWebBundle(),
             new DondrekielAdminBundle\DondrekielAdminBundle(),
 
         ];

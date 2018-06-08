@@ -1,9 +1,4 @@
 var map;
-var websocket;
-var websocketSession;
-var selfMarker;
-var teamList = {};
-var greenIcon;
 
 $(document).ready(function () {
 
@@ -17,105 +12,72 @@ $(document).ready(function () {
         shadowSize: [41, 41]
     });
 
+    blueIcon = L.icon({
+        iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon.png',
+        shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
+
+        iconSize: [25, 41],
+        shadowSize: [41, 41]
+    });
+
+    redIcon = L.icon({
+        iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon-red.png',
+        shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
+
+        iconSize: [25, 41],
+        shadowSize: [41, 41]
+    });
+
+    grayIcon = L.icon({
+        iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon-gray.png',
+        shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
+
+        iconSize: [25, 41],
+        shadowSize: [41, 41]
+    });
+
 
     $('#station-map').width($('#map-container').width());
-    $('#station-map').height($('#map-container').height());
+    $('#station-map').height('400px');
+    if (map === undefined) {
 
-    if (wss_enabled == 1) {
-        websocket = WS.connect('wss://' + app_hostname + ':' + wss_port);
+        map = L.map('station-map').setView([51.8350587, 7.819898], 13);
 
-        websocket.on("socket/connect", function (session) {
-            console.log("Successfully Connected!");
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            attribution: '',
+            id: 'mapbox.streets'
+        }).addTo(map);
 
-            websocketSession = session;
-
-            /*            session.subscribe("dondrekiel/channel", function (uri, payload) {
-                            //$.notify("Received message: " + payload);
-                            console.log("Received message: ", payload);
-                            if (payload["position"] !== undefined && payload["position"]["team"] != undefined) {
-                                console.log("Set position for team " + payload["position"]["team"]);
-                            }
-                        });*/
-        });
-
-        websocket.on('message', function incoming(data) {
-            console.log('Roundtrip time: ${Date.now() - data} ms');
-
-        });
-
-        websocket.on("socket/disconnect", function (error) {
-            console.log("Disconnected for " + error.reason + " with code " + error.code);
-        })
-    }
-
-    if (navigator && navigator.geolocation) {
-        options = {
-            enableHighAccuracy: false,
-            timeout: 5000,
-            maximumAge: 0
-        };
-        navigator.geolocation.watchPosition(successCallback, errorCallback, options);
-        console.log('Geolocation is supported');
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-
-        setInterval(function () {
-            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        }, 5000);
-    } else {
-        console.log('Geolocation is not supported');
+        initMap();
     }
 
 });
 
-function errorCallback(error) {
-    console.log('Error position');
-    console.log('code: ' + error.code + '\n' +
-        'message: ' + error.message + '\n');
-}
-
-function successCallback(position) {
-    try {
-        console.log("Current position is: " + position.coords.latitude + "/" + position.coords.longitude);
-        if (websocketSession) {
-            websocketSession.publish("dondrekiel/channel", {
-                position: {
-                    longitude: position.coords.longitude,
-                    latitude: position.coords.latitude,
-                    team: team_id
-                }
-            });
-        }
-
-        if (map === undefined) {
-
-            map = L.map('station-map').setView([51.8350587, 7.819898], 15);
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 18,
-                attribution: '',
-                id: 'mapbox.streets'
-            }).addTo(map);
-
-            initMap();
-        }
-    }
-    catch (err) {
-        console.log("error: " + err.message);
-    }
-
-}
-
 function initMap() {
+    var options = {
+        enableHighAccuracy: false,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
     var jqxhr = $.get("/rest/station", function (stations) {
     })
         .done(function (stations) {
             for (var key in stations) {
                 console.log("Station: " + stations[key].id.toString());
 
+                if (stations[key].status == 0) {
+                    var stationIcon = grayIcon;
+                } else {
+                    var stationIcon = blueIcon;
+                }
+
                 stationMarker = L.marker([stations[key].location.latitude, stations[key].location.longitude], {
-                    title: stations[key].id,
+                    title: "Station " + stations[key].id + ": " + stations[key].name,
                     id: stations[key].id,
-                    alt: stations[key].id
+                    alt: stations[key].description,
+                    icon: stationIcon
                 });
 
                 stationMarker.on('click', function (e) {
@@ -190,3 +152,4 @@ function initMap() {
             console.log("Error initializing teams!");
         });
 }
+

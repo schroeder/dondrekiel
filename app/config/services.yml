@@ -6,7 +6,6 @@ parameters:
     dondrekiel_admin.menu_listener.class: DondrekielAdminBundle\EventListener\AdminMenuItemListListener
     dondrekiel_admin.twig_extension.class: DondrekielAdminBundle\Extensions\TwigExtensions
     dondrekiel_admin.game.logger.class: DondrekielAdminBundle\Game\GameActionLogger
-    form.type.oh_google_maps.class: Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType
 
 services:
 
@@ -69,9 +68,3 @@ services:
         tags:
             - { name: kernel.event_listener, event:theme.sidebar_setup_menu, method:onSetupMenu }
 
-
-    #form.type.oh_google_maps:
-    #  class: "%form.type.oh_google_maps.class%"
-      #arguments:     [ "%google_maps_api_key%" ]
-    #  tags:
-    #    - {name: "form.type", alias: "oh_google_maps"}

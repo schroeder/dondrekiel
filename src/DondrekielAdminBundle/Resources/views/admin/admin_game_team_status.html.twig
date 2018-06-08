@@ -1,4 +1,4 @@
-{% extends 'AvanzuAdminThemeBundle:layout:base-layout.html.twig' %}
+{% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
 
 {% block title %}
     Dondrekiel
@@ -15,128 +15,211 @@
 
 
 {% block page_content %}
-    <div class="box">
-        <div class="box-header">
-            <h3 class="box-title">Spiele-Team-Liste</h3>
-        </div>
-        <!-- /.box-header -->
-        <div class="box-body">
-            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table id="example1" class="table table-bordered table-striped dataTable" role="grid"
-                               aria-describedby="example1_info">
-                            <thead>
-                            <tr role="row">
-                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-sort="ascending"
-                                    aria-label="Rendering engine: activate to sort column descending"
-                                    style="width: 296px;">Spiel ID
-                                </th>
-                                <th class="sorting_asc" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-sort="ascending"
-                                    aria-label="Rendering engine: activate to sort column descending"
-                                    style="width: 296px;">Spiel Nr
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-sort="ascending"
-                                    aria-label="Browser: activate to sort column ascending" style="width: 361px;">
-                                    Level
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-sort="ascending"
-                                    aria-label="Browser: activate to sort column ascending" style="width: 361px;">
-                                    Name
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Browser: activate to sort column ascending" style="width: 361px;">
-                                    Stufe
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Browser: activate to sort column ascending" style="width: 361px;">
-                                    Team
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
-                                    geplante Spieldauer
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
-                                    Spieldauer
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    aria-label="Engine version: activate to sort column ascending"
-                                    style="width: 256px;">Leveldauer
-                                </th>
-                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
-                                    style="width: 190px;">
-                                    Aktionen
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ total_station_count }} Stationen</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="stationlist_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="stationlist" class="table table-bordered table-striped dataTable" role="grid"
+                                       aria-describedby="stationlist_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="stationlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending"
+                                            style="width: 296px;">ID
+                                        </th>
+                                        <th class="sorting_asc" tabindex="0" aria-controls="stationlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending"
+                                            style="width: 296px;">Name
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="stationlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column ascending"
+                                            style="width: 361px;">
+                                            Status
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="stationlist" rowspan="1"
+                                            colspan="1"
+                                            style="width: 190px;">
+                                            Aktionen
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
 
-                            {% for info in game_team_list %}
-                                <tr role="row"
-                                    class="{% if loop.index is divisible by(2) %}even{% else %}odd{% endif %}">
-                                    <td class="sorting_1">{{ info.game_id }}</td>
-                                    <td class="sorting_1">{{ info.identifier }}</td>
-                                    <td>{{ info.level_id }}</td>
-                                    <td>{{ info.name }}</td>
-                                    <td>{{ info.grade }}</td>
-                                    <td>{{ info.team_id }}</td>
-                                    <td>{{ info.planned_duration }}</td>
-                                    <td>{{ info.game_duration }}</td>
-                                    <td>{{ info.level_duration }}</td>
-                                    <td>
-                                        {#<a role="button" class="btn btn-info"
-                                          href="{{ path('admin_generate_member_passcode', {'id': member.id }) }}">
-                                           <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
-                                       </a>#}
+                                    {% for info in station_list %}
+                                        <tr role="row"
+                                            class="{% if loop.index is divisible by(2) %}even{% else %}odd{% endif %}">
+                                            <td class="sorting_1">{{ info.id }}</td>
+                                            <td>{{ info.name }}</td>
+                                            <td>{{ info.status }}</td>
+                                            <td>
+                                                {#<a role="button" class="btn btn-info"
+                                                  href="{{ path('admin_generate_member_passcode', {'id': member.id }) }}">
+                                                   <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                                               </a>#}
 
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <th>Spiel ID</th>
-                                <th>Spiel Nr</th>
-                                <th>Level</th>
-                                <th>Name</th>
-                                <th>Stufe</th>
-                                <th>Team</th>
-                                <th>geplante Spieldauer</th>
-                                <th>Spieldauer</th>
-                                <th>Leveldauer</th>
-                                <th>Aktionen</th>
-                            </tr>
-                            </tfoot>
-                        </table>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Aktionen</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="dataTables_info" id="stationlist_info" role="status" aria-live="polite">
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="stationlist_paginate">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-5">
-                        <div class="dataTables_info" id="example1_info" role="status" aria-live="polite">
-                            {#Zeige {{ limit }} von {{ total_count }} Eintr&auml;gen#}
+                <!-- /.box-body -->
+            </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">{{ total_team_count }} Teams</h3>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <div id="teamlist_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="teamlist" class="table table-bordered table-striped dataTable" role="grid"
+                                       aria-describedby="teamlist_info">
+                                    <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="teamlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending"
+                                            style="width: 296px;">ID
+                                        </th>
+                                        <th class="sorting_asc" tabindex="0" aria-controls="teamlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Rendering engine: activate to sort column descending"
+                                            style="width: 296px;">Name
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="teamlist" rowspan="1"
+                                            colspan="1"
+                                            aria-sort="ascending"
+                                            aria-label="Browser: activate to sort column ascending"
+                                            style="width: 361px;">
+                                            Status
+                                        </th>
+                                        <th class="sorting" tabindex="0" aria-controls="teamlist" rowspan="1"
+                                            colspan="1"
+                                            style="width: 190px;">
+                                            Aktionen
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for info in team_list %}
+                                        <tr role="row"
+                                            class="{% if loop.index is divisible by(2) %}even{% else %}odd{% endif %}">
+                                            <td class="sorting_1">{{ info.id }}</td>
+                                            <td>{{ info.name }}</td>
+                                            <td>{{ info.status }}</td>
+                                            <td>
+                                                {#<a role="button" class="btn btn-info"
+                                                  href="{{ path('admin_generate_member_passcode', {'id': member.id }) }}">
+                                                   <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
+                                               </a>#}
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Status</th>
+                                        <th>Aktionen</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <div class="dataTables_info" id="teamlist_info" role="status" aria-live="polite">
+                                </div>
+                            </div>
+                            <div class="col-sm-7">
+                                <div class="dataTables_paginate paging_simple_numbers" id="teamlist_paginate">
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-7">
-                        <div class="dataTables_paginate paging_simple_numbers" id="example1_paginate">
-                            {#{ knp_pagination_render(game_team_list) }#}
-                        </div>
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Spiel bearbeiten</h3>
+
+                    <div id="map-container" class="box-body">
+                        <div id="station-map"></div>
+                    </div>
+                    <div class="box-footer">
                     </div>
                 </div>
             </div>
         </div>
-        <!-- /.box-body -->
     </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header card-header-title">
+                    <h4 class="modal-title card-element-title" id="modalHeader"></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="card-content clearfix" id="modalContent">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 
 {% block javascripts_inline %}
-
-    $(document).ready(function() {
-    $('#example1').DataTable();
-    } );
+    <script>
+        $(document).ready(function () {
+            $('#stationlist').DataTable({pageLength: 3});
+            $('#teamlist').DataTable();
+        });
+    </script>
 {% endblock %}

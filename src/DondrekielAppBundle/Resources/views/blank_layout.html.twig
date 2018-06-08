@@ -7,9 +7,9 @@
 
     <title>{% block title %}Dondrekiel App{% endblock %}</title>
     {% stylesheets
-    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
-    '@DondrekielAppBundle/Resources/public/css/dondrekiel.css' %}
-    <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
+        '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/css/bootstrap.css'
+        '@DondrekielAppBundle/Resources/public/css/dondrekiel.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" type="text/css"/>
     {% endstylesheets %}
 </head>
 <body>
@@ -21,9 +21,9 @@
 
 
 {% javascripts
-'%kernel.root_dir%/../vendor/components/jquery/jquery.js'
-'%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js' %}
-<script type="text/javascript" src="{{ asset_url }}"></script>
+    '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
+    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js' %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 
 </body>

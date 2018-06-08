@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Oh\GoogleMapFormTypeBundle\Form\Type\GoogleMapType;
-
 
 class GameType extends AbstractType
 {
@@ -18,7 +16,7 @@ class GameType extends AbstractType
     {
         $builder
             ->add('identifier', null, array('label' => 'Identifier'))
-            ->add('name', null, array('label' => 'Spielname'))
+            ->add('name', null, array('label' => 'Name'))
             ->add('description', null, array(
                     'attr' => array('class' => 'tinymce', 'data-theme' => 'bbcode'),
                     'label' => 'Beschreibung')

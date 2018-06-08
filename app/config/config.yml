@@ -2,7 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
     - { resource: services.yml }
-    - { resource: "@DondrekielWebBundle/Resources/config/services.yml" }
+#    - { resource: "@DondrekielWebBundle/Resources/config/services.yml" }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
@@ -47,8 +47,6 @@ twig:
         avanzu_adminlte_close_alert: true # default is false
         admin_skin: skin-red
 
-    form_themes:
-        - 'OhGoogleMapFormTypeBundle:Form:fields.html.twig'
 # Doctrine Configuration
 doctrine:
     dbal:
@@ -83,7 +81,8 @@ swiftmailer:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ 'DondrekielAppBundle', 'DondrekielWebBundle', 'OhGoogleMapFormTypeBundle' ]
+    bundles:        [ 'DondrekielAppBundle' ]
+#    bundles:        [ 'DondrekielAppBundle', 'OhGoogleMapFormTypeBundle' ]
 
     filters:
         cssrewrite: ~
@@ -166,6 +165,3 @@ cmf_routing_auto:
     persistence:
         phpcr:
             enabled: true
-
-oh_google_map_form_type:
-    api_key: "%google_maps_api_key%"

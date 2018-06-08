@@ -20,5 +20,3 @@ parameters:
 
     dondrekiel.web_url: web.dondrekiel.de
     dondrekiel.app_url: app.dondrekiel.de
-
-    google_maps_api_key: AIzaSyBL6W6MTPZ1XsY1k2lNWqzRqr7sTPHoeTk

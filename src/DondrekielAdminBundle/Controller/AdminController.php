@@ -13,7 +13,6 @@ use DondrekielAppBundle\Repository\TeamRepository;
 use DondrekielAppBundle\Repository\StationRepository;
 use DondrekielAppBundle\Entity\Team;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
-use Endroid\QrCode\QrCode;
 use FPDF;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -21,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AdminController extends Controller
 {
     /**
-     * @Route("/admin", name="dondrekiel_admin")
+     * @Route("/", name="dondrekiel_admin")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function indexAction(Request $request)
@@ -35,7 +34,7 @@ class AdminController extends Controller
 
 
     /**
-     * @Route("/admin/member_passcode", name="admin_member_passcode")
+     * @Route("/member_passcode", name="admin_member_passcode")
      * @Security("has_role('ROLE_ADMIN')")
      */
     public function listMemberPasscodeGenerationAction(Request $request)
@@ -64,7 +63,7 @@ class AdminController extends Controller
             $limit /*limit per page*/
         );
 
-        return $this->render('DondrekielAdminBundle::admin/admin_member_passcode.html.twig', [
+        return $this->render('DondrekielAdminBundle::admin_member_passcode.html.twig', [
                 "member_list" => $memberList,
                 "page" => $page,
                 "limit" => $limit,
@@ -74,45 +73,38 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/game_team_status", name="admingameteamstatus")
+     * @Route("/game_team_status", name="admingameteamstatus")
      */
     public function listGameTeamStatusAction(Request $request)
     {
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return new RedirectResponse($this->generateUrl('login'));
         }
-        //$paginator = $this->get('knp_paginator');
-
-        //$page = $request->query->getInt('page', 1);
-        //$limit = $request->query->getInt('limit', 10);
-
 
         $em = $this->getDoctrine();
 
-        $teamList = [];
+        /* @var StationRepository $gameRepository */
+        $teamRepository = $em->getRepository("DondrekielAppBundle:Team");
+
+        $fullTeamList = $teamRepository->findAll();
 
         /* @var StationRepository $gameRepository */
-        $gameRepository = $em->getRepository("DondrekielAppBundle:Game");
+        $stationRepository = $em->getRepository("DondrekielAppBundle:Station");
 
-        $fullTeamGameList = $this->getCurrentGameStatusList(true);
+        $fullStationList = $stationRepository->findAll();
 
-        /* $teamList = $paginator->paginate(
-             $fullTeamGameList,
-             $page
-             $limit
-         );*/
         return $this->render('DondrekielAdminBundle::admin/admin_game_team_status.html.twig', [
-                "game_team_list" => $fullTeamGameList,
-                /*"page" => $page,
-                "limit" => $limit,*/
-                "total_count" => count($fullTeamGameList)
+                "station_list" => $fullStationList,
+                "total_station_count" => count($fullStationList),
+                "team_list" => $fullTeamList,
+                "total_team_count" => count($fullTeamList)
             ]
         );
     }
 
 
     /**
-     * @Route("/admin/generate_member_passcode/{id}", name="admin_generate_member_passcode", requirements={"id" = "\d+"})
+     * @Route("/generate_member_passcode/{id}", name="admin_generate_member_passcode", requirements={"id" = "\d+"})
      */
     public function generateMemberPasscodeAction($id, Request $request)
     {
@@ -166,7 +158,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/team_passcode", name="admin_team_passcode")
+     * @Route("/team_passcode", name="admin_team_passcode")
      */
     public function listTeamPasscodeGenerationAction(Request $request)
     {
@@ -194,7 +186,7 @@ class AdminController extends Controller
             $limit /*limit per page*/
         );
 
-        return $this->render('DondrekielAdminBundle::admin/admin_team_passcode.html.twig', [
+        return $this->render('DondrekielAdminBundle::admin_team_passcode.html.twig', [
                 "team_list" => $teamList,
                 "page" => $page,
                 "limit" => $limit,
@@ -204,7 +196,7 @@ class AdminController extends Controller
     }
 
     /**
-     * @Route("/admin/generate_team_passcode/{id}", name="admin_generate_team_passcode", requirements={"id" = "\d+"})
+     * @Route("/generate_team_passcode/{id}", name="admin_generate_team_passcode", requirements={"id" = "\d+"})
      */
     public function generateTeamPasscodeAction($id, Request $request)
     {
@@ -253,32 +245,5 @@ class AdminController extends Controller
 
         return new Response($pdf->Output(), 200, array(
             'Content-Type' => 'application/pdf'));
-    }
-
-    private function getCurrentGameStatusList($all = false)
-    {
-        $conn = $this->get('database_connection');
-
-        $queryString = "SELECT g.id as game_id, t.id as team_id, g.level_id, g.identifier, g.name, g.grade, 
-                            g.duration AS planned_duration, 
-                            (UNIX_TIMESTAMP()-tlg.start_time)/60 AS game_duration, 
-                            (UNIX_TIMESTAMP()-tl.start_time)/60 AS level_duration  
-                        FROM game g
-                        LEFT JOIN team_level_game tlg 
-                            ON g.id=tlg.assigned_game 
-                        LEFT JOIN team_level tl 
-                            ON tlg.team_level_id=tl.id 
-                        LEFT JOIN team t
-                            ON tl.team_id=t.id
-                        WHERE tlg.finish_time IS NULL";
-
-        if ($all) {
-            $queryString .= " AND t.id IS NOT NULL";
-        }
-        $result = $conn->executeQuery($queryString);
-        $teamGameList = $result->fetchAll();
-
-        return $teamGameList;
-
     }
 }

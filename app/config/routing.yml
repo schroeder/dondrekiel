@@ -1,9 +1,9 @@
-dondrekiel_web:
-    host:   "{domain}"
-    requirements:
-        domain: "%dondrekiel.web_url%"
-    resource: "@DondrekielWebBundle/Resources/config/routing.yml"
-    prefix:   /
+#dondrekiel_web:
+#    host:   "{domain}"
+#    requirements:
+#        domain: "%dondrekiel.web_url%"
+#    resource: "@DondrekielWebBundle/Resources/config/routing.yml"
+#    prefix:   /
 
 dondrekiel_app:
     host:   "{domain}"

@@ -6,6 +6,7 @@ use DondrekielAppBundle\Periodic\DondrekielPeriodic;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
+use function PHPSTORM_META\type;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
@@ -134,8 +135,15 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     {
         /* @var Team $currentTeam */
         $currentTeam = $this->securityTokenStorage->getToken()->getUser();
+        if (!is_object($currentTeam)) {
+            return;
+        }
         /* @var Team $currentTeam */
         $currentTeam = $this->teamRepository->find($currentTeam->getId());
+
+        if (!$currentTeam) {
+            return;
+        }
 
         if (is_array($event) && array_key_exists('position', $event)) {
             $position = new Position();
@@ -151,7 +159,7 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
         $event['team'] = $currentTeam->getUsername();
 
         $topic->broadcast([
-            'msg' => $event,
+            'position' => $event,
         ]);
 
         /** @var ConnectionInterface $client * */
