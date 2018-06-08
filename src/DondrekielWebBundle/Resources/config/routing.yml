@@ -1,3 +1,0 @@
-dondrekiel_web_homepage:
-    path:     /
-    defaults: { _controller: DondrekielWebBundle:Default:index }

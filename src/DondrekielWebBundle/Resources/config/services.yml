@@ -1,8 +1,0 @@
-services:
-    app.phpcr.initializer:
-        class: Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer
-        arguments:
-            - My custom initializer
-            - ["/cms/pages", "/cms/posts", "/cms/routes"]
-        tags:
-            - { name: doctrine_phpcr.initializer }
