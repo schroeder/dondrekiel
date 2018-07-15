@@ -34,7 +34,11 @@ security:
                 csrf_token_generator: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
             logout:       true
             anonymous:    true
-
+            remember_me:
+                key:      dondrekiel_1234567
+                lifetime: 31536000
+                path: /
+                domain: ~
         admin:
             pattern:    ^/admin/
             anonymous: ~
@@ -43,6 +47,7 @@ security:
                 login_path: /admin/login
                 check_path: /admin/login_check
                 csrf_token_generator: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                always_remember_me: true
             logout:
                 path:   /admin/logout
                 target: /admin/login
