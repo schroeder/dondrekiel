@@ -33,6 +33,10 @@
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Veranstalter
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
                                     Status
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
@@ -46,21 +50,22 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for game in games %}
+                            {% for station in stations %}
                                 <tr>
-                                    <td><a href="{{ path('station_show', { 'id': game.id }) }}">{{ game.id }}</a></td>
-                                    <td>{{ game.identifier }}</td>
-                                    <td>{{ game.name }}</td>
-                                    <td>{% if game.status %}Active{% else %}Inactive{% endif %}</td>
-                                    <td>{{ game.locationLat }} / {{ game.locationLat }}</td>
+                                    <td><a href="{{ path('station_show', { 'id': station.id }) }}">{{ station.id }}</a></td>
+                                    <td>{{ station.identifier }}</td>
+                                    <td>{{ station.name }}</td>
+                                    <td>{{ station.organizer }}</td>
+                                    <td>{% if station.status %}Active{% else %}Inactive{% endif %}</td>
+                                    <td>{{ station.locationLat }} / {{ station.locationLng }}</td>
                                     <td>
-                                        <a href="{{ path('station_show', { 'id': game.id }) }}">
+                                        <a href="{{ path('station_show', { 'id': station.id }) }}">
                                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                         </a>
-                                        <a href="{{ path('station_edit', { 'id': game.id }) }}">
+                                        <a href="{{ path('station_edit', { 'id': station.id }) }}">
                                             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                                         </a>
-                                        <a href="{{ path('station_export', { 'id': game.id }) }}">
+                                        <a href="{{ path('station_export', { 'id': station.id }) }}">
                                             <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
                                         </a>
                                     </td>

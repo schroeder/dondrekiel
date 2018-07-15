@@ -44,6 +44,13 @@ class Station
     /**
      * @var string
      *
+     * @ORM\Column(name="organizer", type="string", length=255, nullable=true)
+     */
+    private $organizer;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
@@ -58,14 +65,14 @@ class Station
     /**
      * @var float
      *
-     * @ORM\Column(name="location_lng", type="float", precision=12, scale=2, nullable=true)
+     * @ORM\Column(name="location_lng", type="float", precision=12, scale=2, nullable=true, columnDefinition="FLOAT")
      */
     private $locationLng;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="location_lat", type="float", precision=12, scale=2, nullable=true)
+     * @ORM\Column(name="location_lat", type="float", precision=12, scale=2, nullable=true, columnDefinition="FLOAT")
      */
     private $locationLat;
 
@@ -101,6 +108,30 @@ class Station
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set organizer
+     *
+     * @param string $organizer
+     *
+     * @return Station
+     */
+    public function setOrganizer($organizer)
+    {
+        $this->organizer = $organizer;
+
+        return $this;
+    }
+
+    /**
+     * Get organizer
+     *
+     * @return string
+     */
+    public function getOrganizer()
+    {
+        return $this->organizer;
     }
 
     /**

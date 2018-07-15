@@ -5,11 +5,11 @@ namespace DondrekielAppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use DondrekielAppBundle\Entity\Level;
-use DondrekielAppBundle\Repository\TeamLevelRepository;
+use DondrekielAppBundle\Entity\Actionlog;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use FOS\UserBundle\Model\User as BaseUser;
+use Oh\GoogleMapFormTypeBundle\Validator\Constraints as OhAssert;
 
 /**
  * Team
@@ -48,11 +48,32 @@ class Team extends BaseUser
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string")
+     */
+    private $comment;
+
+    /**
      * @var Collection
      *
-     * @OneToMany(targetEntity="Actionlog", mappedBy="team", cascade={"persist", "remove", "merge"}, orphanRemoval=true, mappedBy="logEntries")
+     * @OneToMany(targetEntity="Actionlog", mappedBy="team", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
      */
     private $logEntries;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="location_lng", type="float", precision=12, scale=2, nullable=true)
+     */
+    private $locationLng;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="location_lat", type="float", precision=12, scale=2, nullable=true)
+     */
+    private $locationLat;
 
     public function __construct()
     {
@@ -82,16 +103,6 @@ class Team extends BaseUser
     }
 
 
-    /**
-     * Get countPersons
-     *
-     * @return integer
-     */
-    public function getCountMembers()
-    {
-        return $this->getTeamMembers() ? $this->getTeamMembers()->count() : 0;
-    }
-
     public function getRoles()
     {
         return $this->roles;
@@ -109,6 +120,16 @@ class Team extends BaseUser
         $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 
     /**
@@ -136,12 +157,90 @@ class Team extends BaseUser
     }
 
     /**
-     * Get status
+     * Get name
      *
      * @return integer
      */
-    public function getStatus()
+    public function getComment()
     {
-        return $this->status;
+        return $this->comment;
     }
+
+    /**
+     * Set name
+     *
+     * @param int $comment
+     *
+     * @return Team
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Set status
+     *
+     * @param float $locationLat
+     *
+     * @return Position
+     */
+    public function setLocationLat($locationLat)
+    {
+        $this->locationLat = $locationLat;
+
+        return $this;
+    }
+
+    /**
+     * Get locationLat
+     *
+     * @return float
+     */
+    public function getLocationLat()
+    {
+        return $this->locationLat;
+    }
+
+    /**
+     * Set locationLng
+     *
+     * @param float $locationLng
+     *
+     * @return Position
+     */
+    public function setLocationLng($locationLng)
+    {
+        $this->locationLng = $locationLng;
+
+        return $this;
+    }
+
+    /**
+     * Get locationLng
+     *
+     * @return float
+     */
+    public function getLocationLng()
+    {
+        return $this->locationLng;
+    }
+
+    public function setLocation($latlng)
+    {
+        $this->setLocationLat($latlng['lat']);
+        $this->setLocationLng($latlng['lng']);
+        return $this;
+    }
+
+    /**
+     * @OhAssert\LatLng()
+     */
+    public function getLocation()
+    {
+        return array('lat' => $this->getLocationLat(), 'lng' => $this->getLocationLng());
+    }
+
 }

@@ -34,6 +34,7 @@
     "gos/web-socket-bundle": "^1.8",
     "incenteev/composer-parameter-handler": "^2.0",
     "jackalope/jackalope-doctrine-dbal": "~1.1,>=1.1.2",
+    "jms/serializer-bundle": "^2.4",
     "knplabs/knp-paginator-bundle": "^2.7",
     "oh/google-map-form-type-bundle": "dev-master",
     "sensio/distribution-bundle": "^5.0.19",

@@ -15,7 +15,7 @@
     <meta name="author" content="">
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{% block title %}Dondrekiel Spiel Administration{% endblock %}</title>
+    <title>{% block title %}Dondrekiel{% endblock %}</title>
 
     {# -------------------------------------------------------------------------------------------------- STYLESHEETS #}
     {% block stylesheets %}
@@ -80,7 +80,7 @@
             {% block avanzu_sidebar %}
                 {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
                     {{ render(controller('AvanzuAdminThemeBundle:Sidebar:userPanel')) }}
-                    {{ render(controller('AvanzuAdminThemeBundle:Sidebar:searchForm')) }}
+                    {#{ render(controller('AvanzuAdminThemeBundle:Sidebar:searchForm')) }#}
                 {% endif %}
                 {{ render(controller('AvanzuAdminThemeBundle:Sidebar:menu', {'request':app.request})) }}
             {% endblock %}

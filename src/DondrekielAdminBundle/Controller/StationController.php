@@ -33,10 +33,10 @@ class StationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $games = $em->getRepository('DondrekielAppBundle:Station')->findAll();
+        $stations = $em->getRepository('DondrekielAppBundle:Station')->findAll();
 
         return $this->render('DondrekielAdminBundle::admin/station/index.html.twig', array(
-            'games' => $games,
+            'stations' => $stations,
         ));
     }
 
@@ -60,7 +60,7 @@ class StationController extends Controller
     public function newAction(Request $request)
     {
         $game = new Station();
-        $form = $this->createForm('DondrekielAdminBundle\Form\GameType', $game);
+        $form = $this->createForm('DondrekielAdminBundle\Form\StationType', $game);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -139,7 +139,7 @@ class StationController extends Controller
     public function editAction(Request $request, Station $game)
     {
         $deleteForm = $this->createDeleteForm($game);
-        $editForm = $this->createForm('DondrekielAdminBundle\Form\GameType', $game);
+        $editForm = $this->createForm('DondrekielAdminBundle\Form\StationType', $game);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

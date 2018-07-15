@@ -9,7 +9,7 @@
         <div class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Spiel "{{ game.name }}"</h3>
+                    <h3 class="box-title">Team "{{ team.name }}"</h3>
 
                     <div class="box-body">
 
@@ -18,37 +18,28 @@
                             <tbody>
                             <tr>
                                 <th>Id</th>
-                                <td>{{ game.id }}</td>
+                                <td>{{ team.id }}</td>
                             </tr>
                             <tr>
                                 <th>Name</th>
-                                <td>{{ game.name }}</td>
+                                <td>{{ team.name }}</td>
                             </tr>
                             <tr>
-                                <th>Veranstalter</th>
-                                <td>{{ game.organizer }}</td>
+                                <th>Mitglieder</th>
+                                <td>{{ team.members }}</td>
                             </tr>
                             <tr>
                                 <th>Beschreibung</th>
-                                <td>{{ game.description }}</td>
+                                <td>{{ team.comment }}</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
-                                <td>{{ game.status }}</td>
+                                <td>{{ team.status }}</td>
                             </tr>
-                            <tr>
-                                <th>Location Longitude</th>
-                                <td>{{ game.locationLng }}</td>
-                            </tr>
-                            <tr>
-                                <th>Location Latitude</th>
-                                <td>{{ game.locationLat }}</td>
-                            </tr>
-
 
                             <tr>
                                 <th>Status</th>
-                                <td>{% if game.status %}Yes{% else %}No{% endif %}</td>
+                                <td></td>
                             </tr>
                             </tbody>
                         </table>
@@ -66,10 +57,10 @@
 
                     <div class="box-body">
                         <div class="form-group">
-                            <a href="{{ path('station_index') }}" class="btn-primary btn">Zurück zur Liste</a>
+                            <a href="{{ path('team_index') }}" class="btn-primary btn">Zurück zur Liste</a>
                         </div>
                         <div class="form-group">
-                            <a href="{{ path('station_edit', { 'id': game.id }) }}"
+                            <a href="{{ path('team_edit', { 'id': team.id }) }}"
                                class="btn-primary btn">Bearbeiten</a>
                         </div>
                         <div class="form-group">

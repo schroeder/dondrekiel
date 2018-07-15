@@ -28,8 +28,7 @@ class AdminController extends Controller
         if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN')) {
             return new RedirectResponse($this->generateUrl('login'));
         }
-
-        return $this->render('DondrekielAdminBundle::admin/index.html.twig');
+        return new RedirectResponse($this->generateUrl('admingameteamstatus'));
     }
 
 

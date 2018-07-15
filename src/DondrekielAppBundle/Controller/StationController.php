@@ -37,6 +37,7 @@ class StationController extends FOSRestController
                 "name" => $stationObject->getName(),
                 "identifier" => $stationObject->getIdentifier(),
                 "status" => $stationObject->getStatus(),
+                "organizer" => $stationObject->getOrganizer(),
                 "description" => $stationObject->getDescription(),
                 "location" => [
                     "latitude" => $stationObject->getLocationLat(),
@@ -71,6 +72,7 @@ class StationController extends FOSRestController
             "name" => $station->getName(),
             "identifier" => $station->getIdentifier(),
             "status" => $station->getStatus(),
+            "organizer" => $station->getOrganizer(),
             "description" => $station->getDescription(),
             "location" => [
                 "latitude" => $station->getLocationLat(),

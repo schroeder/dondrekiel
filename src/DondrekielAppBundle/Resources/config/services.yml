@@ -10,6 +10,7 @@ services:
             - "@gos_web_socket.websocket.client_manipulator"
             - "@security.token_storage"
             - "@doctrine"
+            - '@?monolog.logger.websocket'
         tags:
             - { name: gos_web_socket.topic }
 

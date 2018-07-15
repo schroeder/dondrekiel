@@ -6,7 +6,6 @@ use DondrekielAppBundle\Periodic\DondrekielPeriodic;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
-use function PHPSTORM_META\type;
 use Ratchet\ConnectionInterface;
 use Ratchet\Wamp\Topic;
 use Gos\Bundle\WebSocketBundle\Router\WampRequest;
@@ -18,6 +17,8 @@ use DondrekielAppBundle\Repository\TeamRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Twig_Environment as TwigEnvironment;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 
 class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
@@ -36,14 +37,20 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     private $teamRepository;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param ClientManipulatorInterface $clientManipulator
      */
-    public function __construct(ClientManipulatorInterface $clientManipulator, TokenStorage $securityTokenStorage, $doctrine)
+    public function __construct(ClientManipulatorInterface $clientManipulator, TokenStorage $securityTokenStorage, $doctrine, LoggerInterface $logger = null)
     {
         $this->clientManipulator = $clientManipulator;
         $this->securityTokenStorage = $securityTokenStorage;
         $this->entityManager = $doctrine->getEntityManager();
         $this->teamRepository = $doctrine->getRepository("DondrekielAppBundle:Team");
+        $this->logger = null === $logger ? new NullLogger() : $logger;
     }
 
     /**
@@ -134,18 +141,32 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
     {
         /* @var Team $currentTeam */
-        $currentTeam = $this->securityTokenStorage->getToken()->getUser();
-        if (!is_object($currentTeam)) {
-            return;
+//        $currentTeam = $this->securityTokenStorage->getToken()->getUser();
+
+        if (is_array($event) && array_key_exists('position', $event)) {
+            $currentTeam = $this->teamRepository->find($event['position']['team']);
         }
-        /* @var Team $currentTeam */
-        $currentTeam = $this->teamRepository->find($currentTeam->getId());
+
+
+        if ($currentTeam) {
+            if (is_string($currentTeam)) {
+                /* @var Team $currentTeam */
+                $currentTeam = $this->teamRepository->findByUsername($currentTeam);
+            } elseif (is_object($currentTeam)) {
+                /* @var Team $currentTeam */
+                $currentTeam = $this->teamRepository->find($currentTeam->getId());
+            }
+        } else {
+            $this->logger->error($currentTeam . ' could not be found');
+        }
 
         if (!$currentTeam) {
+            $this->logger->error($currentTeam . ' could not be found');
             return;
         }
 
         if (is_array($event) && array_key_exists('position', $event)) {
+            $this->logger->info($currentTeam->getUsername() . ' set position');
             $position = new Position();
             $position->setLocationLat($event['position']['latitude']);
             $position->setLocationLng($event['position']['longitude']);
@@ -153,18 +174,22 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
             $position->setTimestamp(time());
 
             $this->entityManager->persist($position);
+
+            $currentTeam->setLocationLat($event['position']['latitude']);
+            $currentTeam->setLocationLng($event['position']['longitude']);
+
+            $this->entityManager->persist($currentTeam);
             $this->entityManager->flush();
+
         }
 
-        $event['team'] = $currentTeam->getUsername();
-
-        $topic->broadcast([
-            'position' => $event,
-        ]);
-
-        /** @var ConnectionInterface $client * */
-        foreach ($topic as $client) {
+        //$event['team'] = $currentTeam->getUsername();
+        if ($event['position']['team'] == 3) {
+            $event['position']['latitude'] = $event['position']['latitude'] + floatval(rand(1, 10) / 1000);
+            $event['position']['longitude'] = $event['position']['longitude'] + floatval(rand(1, 10) / 1000);
         }
+
+        $topic->broadcast($event);
     }
 
     /**

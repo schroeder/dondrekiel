@@ -30,9 +30,15 @@ class TeamRepository extends EntityRepository implements UserProviderInterface
 
     public function getAllActiveTeams()
     {
-        $result = $this->_em->createQuery("SELECT t.id AS team_id, t.username AS username, p1.locationLng AS location_lng, p1.locationLat AS location_lat FROM DondrekielAppBundle\Entity\Team t, DondrekielAppBundle\Entity\Position p1 WHERE t.id=p1.team AND p1.timestamp=(SELECT MAX(p2.timestamp) FROM DondrekielAppBundle\Entity\Position p2 WHERE p2.team=p1.team)")
+        $result = $this->_em->createQuery("SELECT  t.id AS team_id, t.username AS username, t.locationLng AS locationLng, t.locationLat AS locationLat 
+FROM DondrekielAppBundle\Entity\Team t WHERE t.status=2")
+            /*        $result = $this->_em->createQuery("SELECT  t.id AS team_id, t.username AS username, p1.locationLng AS location_lng, p1.locationLat AS location_lat
+            FROM DondrekielAppBundle\Entity\Team t
+            JOIN DondrekielAppBundle\Entity\Position p1 WITH (t.id = p1.team)
+            LEFT OUTER JOIN DondrekielAppBundle\Entity\Position p2
+              WITH (t.id = p2.team AND (p1.timestamp < p2.timestamp OR p1.timestamp = p2.timestamp AND p1.id < p2.id)) WHERE p2.id IS NULL")*/
+            /*SELECT t.id AS team_id, t.username AS username, p1.locationLng AS location_lng, p1.locationLat AS location_lat FROM DondrekielAppBundle\Entity\Team t, DondrekielAppBundle\Entity\Position p1 WHERE t.id=p1.team AND p1.timestamp=(SELECT MAX(p2.timestamp) FROM DondrekielAppBundle\Entity\Position p2 WHERE p2.team=p1.team)")*/
             ->execute();
-
         if (count($result)) {
             return $result;
         }

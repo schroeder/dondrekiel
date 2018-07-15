@@ -1,14 +1,14 @@
 {% extends 'DondrekielAdminBundle:admin:baseadmin-layout.html.twig' %}
 
 
-{#{% block page_title %}<a href="{{ path('team_new') }}" class="btn btn-primary">Create a new team</a>{% endblock %}#}
+{% block page_title %}<a href="{{ path('team_new') }}" class="btn btn-primary">Neues Team anlegen</a>{% endblock %}
 {% block page_subtitle %}{% endblock %}
 {% block flash_messages %}{% endblock %}
 
 {% block page_content %}
     <div class="box">
         <div class="box-header">
-            <h3 class="box-title">Gruppenliste</h3>
+            <h3 class="box-title">Teams</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -25,7 +25,7 @@
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
-                                    Passcode
+                                    Name
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
@@ -33,22 +33,33 @@
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
-                                    Grade
+                                    Aktuelle Position
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
-                                    Aktuelles Level
+                                    Aktionen
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for group in groups %}
+                            {% for team in teams %}
                                 <tr>
-                                    <td>{{ group.id }}</td>
-                                    <td>{{ group.passcode }}</td>
-                                    <td>{{ group.status }}</td>
-                                    <td>{{ group.grade }}</td>
-                                    <td>{{ group.currentLevel }}</td>
+                                    <td>{{ team.id }}</td>
+                                    <td>{{ team.name }}</td>
+                                    <td>{{ team.status }}</td>
+                                    <td>{#{ group.currentLevel }#}</td>
+                                    <td>
+                                        <a href="{{ path('team_show', { 'id': team.id }) }}">
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </a>
+                                        <a href="{{ path('team_edit', { 'id': team.id }) }}">
+                                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                        </a>
+                                        <a href="{{ path('team_export', { 'id': team.id }) }}">
+                                            <span class="glyphicon glyphicon-export" aria-hidden="true"></span>
+                                        </a>
+
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -62,6 +73,8 @@
 {% endblock %}
 
 {% block javascripts_inline %}
-    <script>$(document).ready(function(){$('#group_list').DataTable();});</script>
+    <script>$(document).ready(function () {
+            $('#group_list').DataTable();
+        });</script>
 {% endblock %}
 
