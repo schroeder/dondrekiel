@@ -54,7 +54,7 @@ services:
 
     session.handler.pdo:
         class:     Symfony\Component\HttpFoundation\Session\Storage\Handler\PdoSessionHandler
-        arguments: ['@pdo', {lock_mode: 0}]
+        arguments: [!service { class: PDO, factory: 'database_connection:getWrappedConnection' }, {lock_mode: 0}]
 
 
     dondrekiel.twig.extension:

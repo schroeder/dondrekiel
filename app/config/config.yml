@@ -27,7 +27,6 @@ framework:
     session:
         handler_id: session.handler.pdo
         cookie_lifetime: 31536000
-        lifetime:        31536000
     fragments: ~
     http_method_override: true
     assets: ~
@@ -123,13 +122,13 @@ gos_web_socket:
         router:
             resources:
                 - '@DondrekielAppBundle/Resources/config/rpc/routing.yml'
-    client:
-        firewall: main #secured_area #can be an array of firewalls
-        session_handler: '@session.handler.pdo'
-        storage:
-#            driver: '@gos_web_socket.client_storage.predis.driver'
+    #client:
+    #    firewall: main #secured_area #can be an array of firewalls
+    #    session_handler: '@session.handler.pdo'
+    #    storage:
+#            driver: '@gos_web_socket.client_storage.driver.redis'
 #            decorator: '@gos_web_socket.client_storage.doctrine.decorator'
-#            ttl: 28800 #(optionally) time to live if you use redis driver
+#            ttl: 31536000 #(optionally) time to live if you use redis driver
 #            prefix: client #(optionally) prefix if you use redis driver, create key "client:1" instead key "1"
 
 fos_user:
@@ -166,3 +165,14 @@ cmf_routing_auto:
     persistence:
         phpcr:
             enabled: true
+
+#doctrine_cache:
+#    providers:
+#        redis_cache:
+#            redis:
+#                host: 127.0.0.1
+#                port: 6379
+#                database: 3
+#        websocket_cache_client:
+#            type: redis
+#            alias: gos_web_socket.client_storage.driver.redis

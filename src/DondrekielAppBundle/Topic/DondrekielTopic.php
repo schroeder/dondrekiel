@@ -140,6 +140,8 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
      */
     public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
     {
+        $user = $this->clientManipulator->getClient($connection);
+        var_dump($user);
         /* @var Team $currentTeam */
 //        $currentTeam = $this->securityTokenStorage->getToken()->getUser();
 
