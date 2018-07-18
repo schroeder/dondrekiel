@@ -186,10 +186,10 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
         }
 
         //$event['team'] = $currentTeam->getUsername();
-        if ($event['position']['team'] == 3) {
-            $event['position']['latitude'] = $event['position']['latitude'] + floatval(rand(1, 10) / 1000);
-            $event['position']['longitude'] = $event['position']['longitude'] + floatval(rand(1, 10) / 1000);
-        }
+        //if ($event['position']['team'] == 3) {
+        //    $event['position']['latitude'] = $event['position']['latitude'] + floatval(rand(1, 10) / 1000);
+        //    $event['position']['longitude'] = $event['position']['longitude'] + floatval(rand(1, 10) / 1000);
+        //}
 
         $topic->broadcast($event);
     }
