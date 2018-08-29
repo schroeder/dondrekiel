@@ -3,8 +3,13 @@ var websocket;
 var websocketSession;
 var selfMarker;
 var currentTeam;
+var currentTeamIsTeam = false;
 var teamMarkerList = [];
 var greenIcon;
+var blueIcon;
+var redIcon;
+var grayIcon;
+var stationMarkerList = [];
 
 function nl2br(str, is_xhtml) {
     var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br />' : '<br>';
@@ -19,6 +24,22 @@ $(document).ready(function () {
 
     greenIcon = L.icon({
         iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon-green.png',
+        shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
+
+        iconSize: [25, 41],
+        shadowSize: [41, 41]
+    });
+
+    blueIcon = L.icon({
+        iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon.png',
+        shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
+
+        iconSize: [25, 41],
+        shadowSize: [41, 41]
+    });
+
+    grayIcon = L.icon({
+        iconUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-icon-gray.png',
         shadowUrl: '/bundles/dondrekielapp/js/leaflet/images/marker-shadow.png',
 
         iconSize: [25, 41],
@@ -69,6 +90,31 @@ $(document).ready(function () {
                     }
 
                 }
+                else if (payload["message"] !== undefined && payload["message"]["title"] != undefined) {
+                    message = payload["message"];
+                    console.log("Got a message!");
+                    $('#modalHeader').html(message["title"]);
+                    $('#modalContent').html(
+                        "<p>" + message["text"] + "</p>"
+                    );
+                    $('#myModal').modal();
+                }
+                else if (payload["station_update"] !== undefined && payload["station_update"]["station"] != undefined) {
+                    //message = payload["message"];
+                    console.log("Got station update!");
+                    stationId = payload["station_update"]["station"];
+                    if (stationMarkerList[stationId] != undefined) {
+                        console.log("Current Station: " + stationId);
+
+                        var stationMarker = stationMarkerList[stationId];
+                        if (payload["station_update"]["station"] == 2) {
+                            stationMarker.setIcon(grayIcon);
+                        } else {
+                            stationMarker.setIcon(blueIcon);
+                        }
+
+                    }
+                }
             });
         });
 
@@ -95,11 +141,10 @@ $(document).ready(function () {
         setInterval(function () {
             console.log('Position update');
             navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        }, 5000);
+        }, 120000);
     } else {
         console.log('Geolocation is not supported');
     }
-
 });
 
 function errorCallback(error) {
@@ -157,10 +202,16 @@ function initMap() {
             for (var key in stations) {
                 console.log("Station: " + stations[key].id.toString());
 
+                stationIcon = blueIcon;
+                if (stations[key].status == 0) {
+                    stationIcon = grayIcon;
+                }
+
                 stationMarker = L.marker([stations[key].location.latitude, stations[key].location.longitude], {
-                    title: stations[key].id,
+                    title: "Station " + stations[key].id,
                     id: stations[key].id,
-                    alt: stations[key].id
+                    alt: "Station " + stations[key].id,
+                    icon: stationIcon
                 });
 
                 stationMarker.on('click', function (e) {
@@ -171,12 +222,17 @@ function initMap() {
                         })
                             .done(function (info) {
                                 $('#modalHeader').html("Station \"" + info.name + "\"");
+                                var extra_content = "";
+                                if (info.status == 0) {
+                                    extra_content = "<h5><strong>Diese Station ist momentan nicht besetzt!</strong></h5>"
+                                }
                                 $('#modalContent').html(
+                                    extra_content +
                                     "<strong>Stationsnummer:</strong> " + info.identifier + "<br>" +
                                     "<strong>Veranstalter:</strong> " + info.organizer + "<br><br>" +
                                     nl2br(info.description, true)
                                 );
-                                $('#myModal').modal(options);
+                                $('#myModal').modal();
 
                             })
                             .fail(function () {
@@ -185,6 +241,8 @@ function initMap() {
                     }
                 });
                 stationMarker.addTo(map);
+
+                stationMarkerList[stations[key].id] = stationMarker;
             }
             console.log("Initialized all stations");
 
@@ -202,37 +260,47 @@ function initMap() {
                     console.log("Team: " + teams[key].team_id + "(" + teams[key].locationLat + "/" + teams[key].locationLng + ")");
 
                     if (currentTeam.id == teams[key].team_id) {
-                        console.log("Current team should already been set!");
-                    }
+                        if (currentTeamIsTeam) {
 
-                    teamMarker = L.marker([teams[key].locationLat, teams[key].locationLng], {
-                        title: teams[key].team_id,
-                        id: teams[key].team_id,
-                        alt: teams[key].team_id,
-                        icon: greenIcon
-                    });
+                            if (teamMarkerList[currentTeam.id] != undefined) {
+                                console.log("Current Team: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
 
-                    teamMarker.on('click', function (e) {
-                        console.log(e);
-                        var teamId = e.sourceTarget.options.id
-                        if (teamId !== undefined) {
 
-                            var jqxhr = $.get("/rest/team/info/" + teamId, function (info) {
-                            })
-                                .done(function (info) {
-                                    $('#modalHeader').html("Team " + info.id);
-                                    $('#modalContent').html(info.description);
-                                    $('#myModal').modal(options);
+                                var teamMarker = teamMarkerList[currentTeam.id];
+                                teamMarker.setIcon(redIcon);
 
-                                })
-                                .fail(function () {
-                                    console.log("Error getting team info!");
+                            } else {
+                                console.log("Create current team marker: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
+
+                                teamMarker = L.marker([currentTeam.locationLat, currentTeam.locationLng], {
+                                    title: "Hier seid ihr!",
+                                    id: currentTeam.id,
+                                    alt: "Hier seid ihr!",
+                                    icon: redIcon
                                 });
-                        }
-                    });
-                    teamMarker.addTo(map);
+                                if (map != undefined) {
+                                    teamMarker.addTo(map);
+                                } else {
+                                    console.log("Error: map undefined!");
+                                }
 
-                    teamMarkerList[teams[key].team_id] = teamMarker;
+                                teamMarkerList[currentTeam.id] = teamMarker;
+
+
+                            }
+                        }
+                    } else {
+
+                        teamMarker = L.marker([teams[key].locationLat, teams[key].locationLng], {
+                            title: "Hier ist ein Team",
+                            id: teams[key].team_id,
+                            alt: "Hier ist ein Team",
+                            icon: greenIcon
+                        });
+
+                        teamMarker.addTo(map);
+                        teamMarkerList[teams[key].team_id] = teamMarker;
+                    }
                 }
 
             }
@@ -248,37 +316,21 @@ function initMap() {
 
 function getCurrentTeam() {
     console.log("getCurrentTeam");
-    var jqxht = $.get("/rest/team/current", function (ctresult) {
-    })
-        .done(function (ctresult) {
+    $.ajax({
+        async: false,
+        type: 'GET',
+        url: '/rest/team/current',
+        success: function (ctresult) {
             if (ctresult["result"] == true) {
                 currentTeam = ctresult["current_team"];
-                /*                if (teamMarkerList[currentTeam.id] != undefined) {
-                                    console.log("Current Team: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
-
-                                    var teamMarker = teamMarkerList[currentTeam.id];
-                                    teamMarker.setIcon(redIcon);
-
-                                } else {
-                                    console.log("Create current team marker: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
-
-                                    teamMarker = L.marker([currentTeam.locationLat, currentTeam.locationLng], {
-                                        title: currentTeam.id,
-                                        id: currentTeam.id,
-                                        alt: currentTeam.id,
-                                        icon: redIcon
-                                    });
-                                    teamMarker.addTo(map);
-
-                                    teamMarkerList[currentTeam.id] = teamMarker;
-
-
-                                }*/
+                if (currentTeam.isTeam) {
+                    currentTeamIsTeam = true;
+                } else {
+                    currentTeamIsTeam = false;
+                }
             }
             console.log("Initialized current team");
-        })
-        .fail(function () {
-            console.log("Error initializing teams!");
-        });
+        }
+    });
 
 }

@@ -31,7 +31,7 @@
     "doctrine/phpcr-odm": "~1.2",
     "friendsofsymfony/rest-bundle": "^2.2",
     "friendsofsymfony/user-bundle": "^2.0",
-    "gos/web-socket-bundle": "^1.8",
+    "gos/web-socket-bundle": "1.8.13",
     "incenteev/composer-parameter-handler": "^2.0",
     "jackalope/jackalope-doctrine-dbal": "~1.1,>=1.1.2",
     "jms/serializer-bundle": "^2.4",

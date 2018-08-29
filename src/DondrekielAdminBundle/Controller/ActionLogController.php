@@ -40,7 +40,7 @@ class ActionLogController extends Controller
             ->add('submit', SubmitType::class)
             ->getForm();
 
-        $actionLogs =[];
+        $actionLogs = [];
 
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
@@ -49,26 +49,26 @@ class ActionLogController extends Controller
             $data = $form->getData();
 
             if (null == $data['gameId'] && null == $data['teamId'] & null == $data['logLevel']) {
-                $actionLogs = $em->getRepository('DondrekielAppBundle:ActionLog')->findAll();
+                $actionLogs = $em->getRepository('DondrekielAppBundle:Action')->findAll();
             }
 
             // check for filters
             if ($data['gameId'] !== null) {
-                $filteredLogs = $em->getRepository('DondrekielAppBundle:ActionLog')->findByGame($data['gameId']);
+                $filteredLogs = $em->getRepository('DondrekielAppBundle:Action')->findByGame($data['gameId']);
                 foreach ($filteredLogs as $filteredLog) {
                     array_push($actionLogs, $filteredLog);
                 }
             }
 
             if ($data['teamId'] !== null) {
-                $filteredLogs = $em->getRepository('DondrekielAppBundle:ActionLog')->findByTeam($data['teamId']);
+                $filteredLogs = $em->getRepository('DondrekielAppBundle:Action')->findByTeam($data['teamId']);
                 foreach ($filteredLogs as $filteredLog) {
                     array_push($actionLogs, $filteredLog);
                 }
             }
 
             if ($data['logLevel'] !== null) {
-                $filteredLogs = $em->getRepository('DondrekielAppBundle:ActionLog')->findByLogLevel($data['logLevel']);
+                $filteredLogs = $em->getRepository('DondrekielAppBundle:Action')->findByLogLevel($data['logLevel']);
                 foreach ($filteredLogs as $filteredLog) {
                     array_push($actionLogs, $filteredLog);
                 }
@@ -85,7 +85,7 @@ class ActionLogController extends Controller
 
         // if actionLogs still empty (e.g. GET request)
         if (empty($actionLogs)) {
-            $actionLogs = $em->getRepository('DondrekielAppBundle:ActionLog')->findAll();
+            $actionLogs = $em->getRepository('DondrekielAppBundle:Action')->findAll();
         }
 
         $logs = [];
@@ -95,10 +95,17 @@ class ActionLogController extends Controller
             $logs[$index]['group'] = $actionLog->getTeam()->getId();
             $logs[$index]['text'] = $actionLog->getLogText();
             switch ($actionLog->getLogLevel()) {
-                case 1: $logs[$index]['loglvl'] = 'INFO';break;
-                case 2: $logs[$index]['loglvl'] = 'WARN';break;
-                case 3: $logs[$index]['loglvl'] = 'CRITICAL';break;
-                default: $logs[$index]['loglvl'] = 'NONE';
+                case 1:
+                    $logs[$index]['loglvl'] = 'INFO';
+                    break;
+                case 2:
+                    $logs[$index]['loglvl'] = 'WARN';
+                    break;
+                case 3:
+                    $logs[$index]['loglvl'] = 'CRITICAL';
+                    break;
+                default:
+                    $logs[$index]['loglvl'] = 'NONE';
             }
         }
         return $this->render('DondrekielAdminBundle::admin/actionlog/index.html.twig', array(

@@ -75,7 +75,7 @@ class ResetGameCommand extends ContainerAwareCommand
                     break;
                 case "log": {
                     $output->write("<fg=blue>Reset log</fg=blue> ", false);
-                    if ($this->truncateTable(["DondrekielAppBundle\Entity\Actionlog"])) {
+                    if ($this->truncateTable(["DondrekielAppBundle\Entity\Action"])) {
                         $output->write("<fg=green>OK</fg=green>", true);
                     } else {
                         $output->write("<fg=red>Failed</fg=red>", true);

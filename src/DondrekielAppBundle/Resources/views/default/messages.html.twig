@@ -1,0 +1,44 @@
+{% extends 'DondrekielAppBundle::layout.html.twig' %}
+
+{% block title %}Dondrekiel 2018 - Nachrichten{% endblock %}
+
+{% block body %}
+    <div class="card text-white bg-warning mb-3">
+        <h5 class="card-header">Nachrichten von der Spielleitung</h5>
+        <div class="card-body">
+            <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table id="message_list" class="table table-striped">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">
+                                        #
+                                    </th>
+                                    <th scope="col">
+                                        Uhrzeit
+                                    </th>
+                                    <th scope="col">
+                                        Nachricht
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for message in messages %}
+                                    <tr>
+                                        <th scope="row">{{ message.id }}</th>
+                                        <td>{{ message.sendTime|date(' h:i') }}</td>
+                                        <td>{{ message.messageText }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

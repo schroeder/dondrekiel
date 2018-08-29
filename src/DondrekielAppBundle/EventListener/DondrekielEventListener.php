@@ -1,4 +1,5 @@
 <?php
+
 namespace DondrekielAppBundle\EventListener;
 
 use Gos\Bundle\WebSocketBundle\Event\ClientEvent;
@@ -54,7 +55,7 @@ class DondrekielEventListener
     {
         $event = $event->getEventLoop();
 
-        echo 'Server was successfully started !'. PHP_EOL;
+        echo 'Server was successfully started !' . PHP_EOL;
     }
 
     /**
@@ -66,6 +67,6 @@ class DondrekielEventListener
     {
         $origin = $event->getOrigin;
 
-        echo 'connection rejected from '. $origin . PHP_EOL;
+        echo 'connection rejected from ' . $origin . PHP_EOL;
     }
 }

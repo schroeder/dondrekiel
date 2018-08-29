@@ -2,6 +2,7 @@
 
 namespace DondrekielAppBundle\Repository;
 
+use Avanzu\AdminThemeBundle\EventListener\NavbarShowUserDemoListener;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -22,4 +23,14 @@ class MessageRepository extends EntityRepository
         return true;
     }
 
+
+    public function findAllUnread()
+    {
+        return $this->findBy(array('sendTime' => NULL), array('createTime' => 'ASC'));
+    }
+
+    public function findAll()
+    {
+        return $this->findBy(array(), array('sendTime' => 'DESC'));
+    }
 }

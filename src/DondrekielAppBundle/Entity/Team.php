@@ -5,7 +5,6 @@ namespace DondrekielAppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use DondrekielAppBundle\Entity\Actionlog;
 use Doctrine\ORM\Mapping\OneToMany;
 use Doctrine\ORM\Mapping\ManyToOne;
 use FOS\UserBundle\Model\User as BaseUser;
@@ -41,6 +40,13 @@ class Team extends BaseUser
     private $status;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="is_team", type="integer")
+     */
+    private $isTeam;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string")
@@ -53,13 +59,6 @@ class Team extends BaseUser
      * @ORM\Column(name="comment", type="string")
      */
     private $comment;
-
-    /**
-     * @var Collection
-     *
-     * @OneToMany(targetEntity="Actionlog", mappedBy="team", cascade={"persist", "remove", "merge"}, orphanRemoval=true)
-     */
-    private $logEntries;
 
     /**
      * @var float
@@ -79,7 +78,7 @@ class Team extends BaseUser
     {
         parent::__construct();
         $this->status = 0;
-
+        $this->roles = ['ROLE_TEAM'];
     }
 
     /**
@@ -91,17 +90,6 @@ class Team extends BaseUser
     {
         return $this->id;
     }
-
-    /**
-     * Get memberOfTeam
-     *
-     * @return ArrayCollection<DondrekielAppBundle\Entity\Actionlog>
-     */
-    public function getLogEntries()
-    {
-        return $this->logEntries;
-    }
-
 
     public function getRoles()
     {
@@ -130,6 +118,30 @@ class Team extends BaseUser
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set status
+     *
+     * @param int $status
+     *
+     * @return Team
+     */
+    public function setIsTeam($isTeam)
+    {
+        $this->isTeam = $isTeam;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer
+     */
+    public function getIsTeam()
+    {
+        return $this->isTeam;
     }
 
     /**
@@ -243,4 +255,12 @@ class Team extends BaseUser
         return array('lat' => $this->getLocationLat(), 'lng' => $this->getLocationLng());
     }
 
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+
+        // Change some mapped values so preUpdate will get called.
+        //$this->refreshSalt(); // generates a new salt and sets it
+        //$this->password = ''; // just blank it out
+    }
 }

@@ -14,7 +14,13 @@ services:
         tags:
             - { name: gos_web_socket.topic }
 
-    dondrekiel.periodic_dondrekiel_service:
-        class: DondrekielAppBundle\Periodic\DondrekielPeriodic
+    dondrekiel.login_event_listener:
+        class: DondrekielAppBundle\EventListener\DondrekielLoginEventListener
+        arguments:
+            - "@doctrine"
+            - "@security.encoder_factory"
         tags:
-            - { name: gos_web_socket.periodic }
+            - { name: 'kernel.event_listener', event: 'security.interactive_login' }
+            - { name: 'doctrine.event_listener', event: 'prePersist' }
+            - { name: 'doctrine.event_listener', event: 'postUpdate' }
+            - { name: 'doctrine.event_listener', event: 'preUpdate' }

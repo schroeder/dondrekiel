@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Message
 {
+
+    const TYPE_TEAM = 1;
+    const TYPE_STATION = 2;
+    const TYPE_ALL = 3;
     /**
      * @var integer
      *
@@ -30,39 +34,25 @@ class Message
     private $messageText;
 
     /**
-     * @var string
+     * @var integer
+     *
+     * @ORM\Column(name="create_time", type="integer", nullable=true)
+     */
+    private $createTime;
+
+    /**
+     * @var integer
      *
      * @ORM\Column(name="send_time", type="integer", nullable=true)
      */
     private $sendTime;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\Column(name="read_time", type="integer", nullable=true)
+     * @ORM\Column(name="receiver", type="integer", nullable=true)
      */
-    private $readTime;
-
-
-    /**
-     * @var \DondrekielAppBundle\Entity\Station
-     *
-     * @ORM\ManyToOne(targetEntity="DondrekielAppBundle\Entity\Station")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="station", referencedColumnName="id")
-     * })
-     */
-    private $station;
-
-    /**
-     * @var \DondrekielAppBundle\Entity\Team
-     *
-     * @ORM\ManyToOne(targetEntity="DondrekielAppBundle\Entity\Team")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="team", referencedColumnName="id")
-     * })
-     */
-    private $team;
+    private $receiver;
 
 
     /**
@@ -118,9 +108,33 @@ class Message
      *
      * @return \DateTime
      */
+    public function getCreateTime()
+    {
+        return $this->createTime;
+    }
+
+    /**
+     * Get sendTime
+     *
+     * @return \DateTime
+     */
     public function getSendTime()
     {
         return $this->sendTime;
+    }
+
+    /**
+     * Set sendTime
+     *
+     * @param \DateTime $sendTime
+     *
+     * @return Message
+     */
+    public function setCreateTime($createTime)
+    {
+        $this->createTime = $createTime;
+
+        return $this;
     }
 
     /**
@@ -130,9 +144,9 @@ class Message
      *
      * @return Message
      */
-    public function setReadTime($readTime)
+    public function setReceiver($receiver)
     {
-        $this->readTime = $readTime;
+        $this->receiver = $receiver;
 
         return $this;
     }
@@ -142,56 +156,8 @@ class Message
      *
      * @return \DateTime
      */
-    public function getReadTime()
+    public function getReceiver()
     {
-        return $this->readTime;
-    }
-
-    /**
-     * Set station
-     *
-     * @param \DondrekielAppBundle\Entity\Station $station
-     *
-     * @return Message
-     */
-    public function setStation(\DondrekielAppBundle\Entity\Station $station = null)
-    {
-        $this->station = $station;
-
-        return $this;
-    }
-
-    /**
-     * Get station
-     *
-     * @return \DondrekielAppBundle\Entity\Station
-     */
-    public function getStation()
-    {
-        return $this->station;
-    }
-
-    /**
-     * Set team
-     *
-     * @param \DondrekielAppBundle\Entity\Team $team
-     *
-     * @return Message
-     */
-    public function setTeam(\DondrekielAppBundle\Entity\Team $team = null)
-    {
-        $this->team = $team;
-
-        return $this;
-    }
-
-    /**
-     * Get team
-     *
-     * @return \DondrekielAppBundle\Entity\Team
-     */
-    public function getTeam()
-    {
-        return $this->team;
+        return $this->receiver;
     }
 }

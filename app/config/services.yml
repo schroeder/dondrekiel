@@ -5,13 +5,8 @@ parameters:
     dondrekiel.user.provider.entity.class: DondrekielAppBundle\Entity\Team
     dondrekiel_admin.menu_listener.class: DondrekielAdminBundle\EventListener\AdminMenuItemListListener
     dondrekiel_admin.twig_extension.class: DondrekielAdminBundle\Extensions\TwigExtensions
-    dondrekiel_admin.game.logger.class: DondrekielAdminBundle\Game\GameActionLogger
 
 services:
-
-    dondrekiel.action.logger:
-        class:        %dondrekiel_admin.game.logger.class%
-        arguments:     [ "@doctrine.orm.entity_manager" ]
 
     # makes classes in src/AppBundle available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

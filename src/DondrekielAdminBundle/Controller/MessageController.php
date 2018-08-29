@@ -7,7 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use DondrekielAppBundle\Entity\Message;
 
 /**
- * ActionLog controller.
+ * MessageController controller.
  *
  * @Route("admin/message")
  */

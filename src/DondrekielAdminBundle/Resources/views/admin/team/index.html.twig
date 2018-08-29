@@ -25,11 +25,19 @@
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Identifier
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
                                     Name
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
                                     Status
+                                </th>
+                                <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
+                                    Team/Station
                                 </th>
                                 <th class="sorting" tabindex="0" aria-controls="example1" rowspan="1" colspan="1"
                                     aria-label="Platform(s): activate to sort column ascending" style="width: 321px;">
@@ -45,8 +53,10 @@
                             {% for team in teams %}
                                 <tr>
                                     <td>{{ team.id }}</td>
+                                    <td>{{ team.username }}</td>
                                     <td>{{ team.name }}</td>
                                     <td>{{ team.status }}</td>
+                                    <td>{% if team.isTeam %}Team{% else %}Station{% endif %}</td>
                                     <td>{#{ group.currentLevel }#}</td>
                                     <td>
                                         <a href="{{ path('team_show', { 'id': team.id }) }}">

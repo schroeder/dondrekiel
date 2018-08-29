@@ -31,7 +31,7 @@ class TeamRepository extends EntityRepository implements UserProviderInterface
     public function getAllActiveTeams()
     {
         $result = $this->_em->createQuery("SELECT  t.id AS team_id, t.username AS username, t.locationLng AS locationLng, t.locationLat AS locationLat 
-FROM DondrekielAppBundle\Entity\Team t WHERE t.status=2")
+FROM DondrekielAppBundle\Entity\Team t WHERE t.status=2 AND t.isTeam=1")
             /*        $result = $this->_em->createQuery("SELECT  t.id AS team_id, t.username AS username, p1.locationLng AS location_lng, p1.locationLat AS location_lat
             FROM DondrekielAppBundle\Entity\Team t
             JOIN DondrekielAppBundle\Entity\Position p1 WITH (t.id = p1.team)

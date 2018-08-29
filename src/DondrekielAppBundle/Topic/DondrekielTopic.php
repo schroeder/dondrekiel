@@ -2,7 +2,7 @@
 
 namespace DondrekielAppBundle\Topic;
 
-use DondrekielAppBundle\Periodic\DondrekielPeriodic;
+use DondrekielAppBundle\Repository\ActionRepository;
 use Gos\Bundle\WebSocketBundle\Topic\TopicInterface;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimerInterface;
 use Gos\Bundle\WebSocketBundle\Client\ClientManipulatorInterface;
@@ -12,7 +12,10 @@ use Gos\Bundle\WebSocketBundle\Router\WampRequest;
 use Gos\Bundle\WebSocketBundle\Topic\TopicPeriodicTimer;
 use Gos\Bundle\WebSocketBundle\Topic\ConnectionPeriodicTimer;
 use DondrekielAppBundle\Entity\Position;
+use DondrekielAppBundle\Entity\Action;
 use DondrekielAppBundle\Entity\Team;
+use DondrekielAppBundle\Entity\Message;
+use DondrekielAppBundle\Repository\MessageRepository;
 use DondrekielAppBundle\Repository\TeamRepository;
 use Symfony\Component\Validator\Constraints\DateTime;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
@@ -34,7 +37,19 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
 
     private $entityManager;
 
+    /**
+     * @var TeamRepository
+     */
     private $teamRepository;
+
+    /**
+     * @var MessageRepository
+     */
+    private $messageRepository;
+    /**
+     * @var ActionRepository
+     */
+    private $actionRepository;
 
     /**
      * @var LoggerInterface
@@ -50,6 +65,8 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
         $this->securityTokenStorage = $securityTokenStorage;
         $this->entityManager = $doctrine->getEntityManager();
         $this->teamRepository = $doctrine->getRepository("DondrekielAppBundle:Team");
+        $this->messageRepository = $doctrine->getRepository("DondrekielAppBundle:Message");
+        $this->actionRepository = $doctrine->getRepository("DondrekielAppBundle:Action");
         $this->logger = null === $logger ? new NullLogger() : $logger;
     }
 
@@ -68,16 +85,44 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
      */
     public function registerPeriodicTimer(Topic $topic)
     {
-        //add
-        $this->periodicTimer->addPeriodicTimer($this, 'hello', 2, function () use ($topic) {
-            $topic->broadcast('hello world');
+        $this->periodicTimer->addPeriodicTimer($this, 'message', 10, function () use ($topic) {
+            $messages = $this->messageRepository->findAllUnread();
+            foreach ($messages as $message) {
+                /*
+                 * @var Message $message
+                 */
+                $topic->broadcast([
+                    'message' =>
+                        [
+                            'title' => 'Nachrichen von der Spielleitung!',
+                            'text' => $message->getMessageText()
+                        ]
+                ]);
+                $message->setSendTime(time());
+                $this->entityManager->persist($message);
+                $this->entityManager->flush();
+                $this->logger->info('Broadcast message to teams.');
+            }
         });
-
-        //exist
-        $this->periodicTimer->isPeriodicTimerActive($this, 'hello'); // true or false
-
-        //remove
-        $this->periodicTimer->cancelPeriodicTimer($this, 'hello');
+        $this->periodicTimer->addPeriodicTimer($this, 'station_update', 10, function () use ($topic) {
+            $actionList = $this->actionRepository->findAllUnread();
+            foreach ($actionList as $action) {
+                /*
+                 * @var $action Action
+                 */
+                $topic->broadcast([
+                    'station_update' =>
+                        [
+                            'status' => $action->GetAction(),
+                            'station' => $action->getStation()->getId()
+                        ]
+                ]);
+                $action->setSendTime(time());
+                $this->entityManager->persist($action);
+                $this->entityManager->flush();
+                $this->logger->info('Broadcast station update to teams.');
+            }
+        });
     }
 
     /**
@@ -93,17 +138,16 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
         //this will broadcast the message to ALL subscribers of this topic.
         //$topic->broadcast(['msg' => $connection->resourceId . " has joined " . $topic->getId()]);
         /** @var ConnectionPeriodicTimer $topicTimer */
-        $topicTimer = $connection->PeriodicTimer;
+        //$topicTimer = $connection->PeriodicTimer;
 
         //Add periodic timer
-        /*$topicTimer->addPeriodicTimer('hello', 2 * 60, function () use ($topic, $connection) {
-            $connection->event($topic->getId(), ['msg' => 'hello world']);
-        });*/
-
-        $adminuser = $this->clientManipulator->findByUsername($topic, 'admin');
-        if (false !== $adminuser) {
-            $topic->broadcast('Hello admin', array(), array($adminuser['connection']->WAMP->sessionId));
-        }
+        //$topicTimer->addPeriodicTimer('hello', 5, function () use ($topic, $connection) {
+//            $connection->event($topic->getId(), 'hello team ' . $topic->getId());
+        //      });
+        //    $adminuser = $this->clientManipulator->findByUsername($topic, 'admin');
+        //  if (false !== $adminuser) {
+        //    $topic->broadcast('Hello admin', array(), array($adminuser['connection']->WAMP->sessionId));
+        //}
 
         //exist
         //$topicTimer->isPeriodicTimerActive('hello'); //true or false
@@ -123,7 +167,7 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     public function onUnSubscribe(ConnectionInterface $connection, Topic $topic, WampRequest $request)
     {
         //this will broadcast the message to ALL subscribers of this topic.
-        $topic->broadcast(['msg' => $connection->resourceId . " has left " . $topic->getId()]);
+        $topic->broadcast(['message' => $connection->resourceId . " has left " . $topic->getId()]);
     }
 
 
@@ -141,7 +185,6 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
     public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
     {
         $user = $this->clientManipulator->getClient($connection);
-        var_dump($user);
         /* @var Team $currentTeam */
 //        $currentTeam = $this->securityTokenStorage->getToken()->getUser();
 
@@ -164,6 +207,11 @@ class DondrekielTopic implements TopicInterface, TopicPeriodicTimerInterface
 
         if (!$currentTeam) {
             $this->logger->error($currentTeam . ' could not be found');
+            return;
+        }
+
+        if (!$currentTeam->getIsTeam()) {
+            $this->logger->warn($currentTeam . ' is not a team');
             return;
         }
 
