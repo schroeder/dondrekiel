@@ -113,9 +113,9 @@ function initMap() {
             if (result["result"] == true) {
                 var teams = result["teams"];
                 for (var key in teams) {
-                    console.log("Team: " + teams[key].team_id + "(" + teams[key].location_lat + "/" + teams[key].location_lng + ")");
+                    console.log("Team: " + teams[key].team_id + "(" + teams[key].locationLat + "/" + teams[key].locationLng + ")");
 
-                    teamMarker = L.marker([teams[key].location_lat, teams[key].location_lng], {
+                    teamMarker = L.marker([teams[key].locationLat, teams[key].locationLng], {
                         title: teams[key].team_id,
                         id: teams[key].team_id,
                         alt: teams[key].team_id,

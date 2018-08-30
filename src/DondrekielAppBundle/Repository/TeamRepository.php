@@ -45,6 +45,11 @@ FROM DondrekielAppBundle\Entity\Team t WHERE t.status=2 AND t.isTeam=1")
         return false;
     }
 
+    public function getAllActiveTeams2()
+    {
+        return $this->findBy(array('status' => 2, 'isTeam' => 1));
+    }
+
     /*
  * SELECT p1.*, t.* FROM team t, position p1 WHERE t.id=p1.team_id AND p1.timestamp= (SELECT MAX(p2.timestamp) FROM position p2 WHERE p2.team_id=p1.team_id);
  * */

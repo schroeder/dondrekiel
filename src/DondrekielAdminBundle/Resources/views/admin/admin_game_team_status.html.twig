@@ -65,11 +65,12 @@
                                             <td>{{ info.name }}</td>
                                             <td>{{ info.status }}</td>
                                             <td>
-                                                {#<a role="button" class="btn btn-info"
-                                                  href="{{ path('admin_generate_member_passcode', {'id': member.id }) }}">
-                                                   <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
-                                               </a>#}
-
+                                                <a href="{{ path('station_show', { 'id': info.id }) }}">
+                                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                                <a href="{{ path('station_edit', { 'id': info.id }) }}">
+                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -140,18 +141,19 @@
                                     </thead>
                                     <tbody>
 
-                                    {% for info in team_list %}
+                                    {% for team in team_list %}
                                         <tr role="row"
                                             class="{% if loop.index is divisible by(2) %}even{% else %}odd{% endif %}">
-                                            <td class="sorting_1">{{ info.id }}</td>
-                                            <td>{{ info.name }}</td>
-                                            <td>{{ info.status }}</td>
+                                            <td class="sorting_1">{{ team.username }}</td>
+                                            <td>{{ team.name }}</td>
+                                            <td>{{ team.status }}</td>
                                             <td>
-                                                {#<a role="button" class="btn btn-info"
-                                                  href="{{ path('admin_generate_member_passcode', {'id': member.id }) }}">
-                                                   <span class="glyphicon glyphicon-qrcode" aria-hidden="true"></span>
-                                               </a>#}
-
+                                                <a href="{{ path('team_show', { 'id': team.id }) }}">
+                                                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                                </a>
+                                                <a href="{{ path('team_edit', { 'id': team.id }) }}">
+                                                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                                </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
@@ -185,7 +187,7 @@
         <div class="col-md-6">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Spiel bearbeiten</h3>
+                    <h3 class="box-title">Übersicht (statisch)</h3>
 
                     <div id="map-container" class="box-body">
                         <div id="station-map"></div>

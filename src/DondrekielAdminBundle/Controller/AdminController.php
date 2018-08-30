@@ -85,7 +85,7 @@ class AdminController extends Controller
         /* @var StationRepository $gameRepository */
         $teamRepository = $em->getRepository("DondrekielAppBundle:Team");
 
-        $fullTeamList = $teamRepository->findAll();
+        $fullTeamList = $teamRepository->getAllActiveTeams2();
 
         /* @var StationRepository $gameRepository */
         $stationRepository = $em->getRepository("DondrekielAppBundle:Station");

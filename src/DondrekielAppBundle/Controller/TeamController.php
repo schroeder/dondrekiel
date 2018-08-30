@@ -17,7 +17,8 @@ class TeamController extends FOSRestController
      */
     public function getTeamAction()
     {
-        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) {
+        if (false === ($this->get('security.authorization_checker')->isGranted('ROLE_TEAM') ||
+                $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))) {
             return new JsonResponse(["error" => "not allowed"]);
         }
 
