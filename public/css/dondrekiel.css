@@ -1,0 +1,13 @@
+/*#map {
+    width: 100%;
+    min-height: 500px;
+    background-image: url('/images/placeholder.png');
+
+}
+
+.map-container {
+    margin-top: 15px;
+}
+*/
+
+#station-map { height: 180px; }

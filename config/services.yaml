@@ -4,6 +4,14 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app_hostname: '%env(APP_HOSTNAME)%'
+    wss_enabled: '%env(WSS_ENABLED)%'
+    wss_port: '%env(WSS_PORT)%'
+    dondrekiel.web_url: '%env(DONDREKIEL_WEB_URL)%'
+    dondrekiel.app_url: '%env(DONDREKIEL_APP_URL)%'
+    secret: '%env(APP_SECRET)%'
+
+###< symfony/mailer ###
 
 services:
     # default configuration for services in *this* file
@@ -22,3 +30,4 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
