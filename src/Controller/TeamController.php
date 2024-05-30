@@ -23,8 +23,8 @@ class TeamController extends AbstractFOSRestController
     #[Route('/rest/team', name: 'rest_get_team')]
     public function getTeamAction(ManagerRegistry $doctrine, Request $request,SerializerInterface $serializer): JsonResponse
     {
-        if (false === ($this->get('security.authorization_checker')->isGranted('ROLE_TEAM') ||
-                $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))) {
+        if (false === ($this->isGranted('ROLE_TEAM') ||
+                $this->isGranted('ROLE_ADMIN'))) {
             return new JsonResponse(["error" => "not allowed"]);
         }
         
