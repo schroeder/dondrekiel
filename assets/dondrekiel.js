@@ -257,7 +257,7 @@ function initMap() {
             if (result["result"] == true) {
                 var teams = result["teams"];
                 for (var key in teams) {
-                    console.log("Team: " + teams[key].team_id + "(" + teams[key].locationLat + "/" + teams[key].locationLng + ")");
+                    console.log("XX Team: " + teams[key].team_id + "(" + teams[key].locationLat + "/" + teams[key].locationLng + ")");
 
                     if (currentTeam.id == teams[key].team_id) {
                         if (currentTeamIsTeam) {

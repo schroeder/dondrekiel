@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use DondrekielAppBundle\Repository\TeamRepository;
 use App\Entity\Team;
+use App\Entity\Position;
 use Doctrine\Persistence\ManagerRegistry;
 
 
@@ -46,15 +47,15 @@ class TeamController extends AbstractFOSRestController
     }
 
     #[Route('/rest/team/current', name: 'rest_get_current_team')]
-    public function getCurrentTeamAction(ManagerRegistry $doctrine, Request $request,SerializerInterface $serializer, $id = 1): JsonResponse
+    public function getCurrentTeamAction(ManagerRegistry $doctrine, Request $request,SerializerInterface $serializer): JsonResponse
     {
         if (false === $this->isGranted('ROLE_TEAM')) {
             return new JsonResponse(["error" => "not allowed"]);
         }
 
         $teamRepository = $doctrine->getRepository(Team::class);
+        $team = $this->getUser();
 
-        $team = $teamRepository->find($id);
         if ($team){
             $result = ["result" => true, "current_team" => $serializer->normalize($team)];
         }
@@ -67,22 +68,78 @@ class TeamController extends AbstractFOSRestController
         return new JsonResponse($result, 200);
 
     }
-/*
-    #[Route('/rest/team/info/{id}', name: 'rest_get_team_info')]
-    public function getTeamInfoAction($id)
-    {
-        if (false === $this->get('security.authorization_checker')->isGranted('ROLE_TEAM')) {
+
+    #[Route('/rest/team/position', name: 'current_team_position', methods: ['POST'])]
+    public function setCurrentTeamPosition(
+        Request $request,
+        ManagerRegistry $doctrine
+    ): Response {
+
+        if (false === $this->isGranted('ROLE_TEAM')) {
             return new JsonResponse(["error" => "not allowed"]);
         }
 
-        $doctrine = $this->getDoctrine();
+        $team = $this->getUser();
+
+        $entityManager = $doctrine->getManager();
+
+
+
+        $teamId = $request->getPayload()->get('team', false);
+
+        if ($team->getId() != $teamId) {
+            return new JsonResponse(["error" => "not a valid team"]);
+        }
+
+        $locationLat = $request->getPayload()->get('latitude', false);
+        $locationLng = $request->getPayload()->get('longitude', false);
+
+
+        $position = new Position();
+        $position->setLocationLat($locationLat);
+        $position->setLocationLng($locationLng);
+        $position->setTeam($team);
+        $position->setTimestamp(time());
+
+        $entityManager->persist($position);
+
+        $team->setLocationLat($locationLat);
+        $team->setLocationLng($locationLng);
+
+        $entityManager->persist($team);
+        $entityManager->flush();
+
+
+
+        $result = [
+            $teamId,
+            $locationLat,
+            $locationLng
+        ];
+
+        return new JsonResponse($result, 200);
+
+
+    }
+
+
+
+    #[Route('/rest/team/info/{id}', name: 'rest_get_team_info')]
+    public function getTeamInfoAction(
+        $id,
+        ManagerRegistry $doctrine
+        )
+    {
+        if (false === $this->isGranted('ROLE_TEAM')) {
+            return new JsonResponse(["error" => "not allowed"]);
+        }
 
         /* @var TeamRepository $teamRepository */
-//        $teamRepository = $doctrine->getRepository("DondrekielAppBundle:Team");
+        $teamRepository = $doctrine->getRepository("Team");
 
         /* @var Team $team */
-  //      $team = $teamRepository->find($id);
-/*
+        $team = $teamRepository->find($id);
+
         $teamInfo = [
             "id" => $team->getId(),
             "login" => $team->getUsername()
@@ -92,7 +149,7 @@ class TeamController extends AbstractFOSRestController
         $teamInfo['content'] = $teamInfoHtml->getContent();
 
         return new JsonResponse($teamInfo);
-    }*/
+    }
 
 
 }

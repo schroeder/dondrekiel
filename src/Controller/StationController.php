@@ -46,4 +46,40 @@ class StationController extends AbstractController
         return new JsonResponse($stationList, 200);
 
     }
+
+
+    #[Route('/rest/station/info/{id}', name: 'rest_get_station_info')]
+    public function getStationInfoAction(
+        $id,
+        ManagerRegistry $doctrine
+        )
+    {
+        if (false === $this->isGranted('ROLE_TEAM')) {
+            return new JsonResponse(["error" => "not allowed"]);
+        }
+
+        $stationRepository = $doctrine->getRepository(Station::class);
+
+        $station = $stationRepository->find($id);
+
+
+        $stationInfo = [
+            "id" => $station->getId(),
+            "name" => $station->getName(),
+            "identifier" => $station->getIdentifier(),
+            "status" => $station->getStatus(),
+            "organizer" => $station->getOrganizer(),
+            "description" => $station->getDescription(),
+            "location" => [
+                "latitude" => $station->getLocationLat(),
+                "longitude" => $station->getLocationLng()
+            ]
+        ];
+
+        $stationInfoHtml = $this->render('station/info.html.twig', ['station' => $stationInfo]);
+        $stationInfo['content'] = $stationInfoHtml;
+
+        return new JsonResponse($stationInfo);
+    }
+
 }

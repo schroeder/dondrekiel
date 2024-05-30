@@ -3,7 +3,6 @@ var websocket;
 var websocketSession;
 var selfMarker;
 var currentTeam;
-var currentTeamIsTeam = false;
 var teamMarkerList = [];
 var greenIcon;
 var blueIcon;
@@ -58,7 +57,7 @@ $(document).ready(function () {
     $('#station-map').width($('#map-container').width());
     $('#station-map').height($('#map-container').height());
 
-    if (wss_enabled == 1) {
+    /*if (wss_enabled == 1) {
         websocket = WS.connect('wss://' + app_hostname + ':' + wss_port);
 
         websocket.on("socket/connect", function (session) {
@@ -127,7 +126,7 @@ $(document).ready(function () {
         websocket.on("socket/disconnect", function (error) {
             console.log("Disconnected for " + error.reason + " with code " + error.code);
         })
-    }
+    }*/
 
     if (navigator && navigator.geolocation) {
         options = {
@@ -142,7 +141,7 @@ $(document).ready(function () {
         setInterval(function () {
             console.log('Position update');
             navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        }, 120000);
+        }, 1200);
     } else {
         console.log('Geolocation is not supported');
     }
@@ -158,7 +157,7 @@ function successCallback(position) {
     console.log("successCallback");
     try {
         console.log("Current position is: " + position.coords.latitude + "/" + position.coords.longitude);
-        if (websocketSession) {
+        /*if (websocketSession) {
             websocketSession.publish("dondrekiel/channel", {
                 position: {
                     longitude: position.coords.longitude,
@@ -174,7 +173,22 @@ function successCallback(position) {
                 teamMarker.setLatLng(newLatLng);
             }
 
-        }
+        }*/
+        if (currentTeam) {
+
+            var posting = $.post( "/rest/team/position", { 
+                "longitude": position.coords.longitude,
+                "latitude": position.coords.latitude,
+                "team": currentTeam.id
+
+            } 
+            );
+            var teamMarker = teamMarkerList[currentTeam.id];
+
+            var newLatLng = new L.LatLng(position.coords.latitude, position.coords.longitude);
+            teamMarker.setLatLng(newLatLng);
+
+    }
 
         if (map === undefined) {
 
@@ -261,7 +275,7 @@ function initMap() {
                     console.log("Team: " + teams[key].id + "(" + teams[key].locationLat + "/" + teams[key].locationLng + ")");
 
                     if (currentTeam.id == teams[key].id) {
-                        if (currentTeamIsTeam) {
+                        if (currentTeam.team == true) {
 
                             if (teamMarkerList[currentTeam.id] != undefined) {
                                 console.log("Current Team: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
@@ -294,13 +308,13 @@ function initMap() {
 
                         teamMarker = L.marker([teams[key].locationLat, teams[key].locationLng], {
                             title: "Hier ist ein Team",
-                            id: teams[key].team_id,
+                            id: teams[key].id,
                             alt: "Hier ist ein Team",
                             icon: greenIcon
                         });
 
                         teamMarker.addTo(map);
-                        teamMarkerList[teams[key].team_id] = teamMarker;
+                        teamMarkerList[teams[key].id] = teamMarker;
                     }
                 }
 
@@ -317,21 +331,18 @@ function initMap() {
 
 function getCurrentTeam() {
     console.log("getCurrentTeam");
-    $.ajax({
-        async: false,
-        type: 'GET',
-        url: '/rest/team/current',
-        success: function (ctresult) {
-            if (ctresult["result"] == true) {
-                currentTeam = ctresult["current_team"];
-                if (currentTeam.isTeam) {
-                    currentTeamIsTeam = true;
-                } else {
-                    currentTeamIsTeam = false;
-                }
+
+    var jqxht = $.get("/rest/team/current", function (result) {
+    })
+        .done(function (result) {
+            if (result["result"] == true) {
+                currentTeam = result["current_team"];
             }
             console.log("Initialized current team");
-        }
-    });
+        })
+        .fail(function () {
+            console.log("Error initializing current team!");
+        });
+};
 
-}
+
