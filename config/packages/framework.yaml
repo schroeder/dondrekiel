@@ -4,7 +4,9 @@ framework:
     #csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        cookie_lifetime: 172800
+        gc_maxlifetime: 172800
 
     #esi: true
     #fragments: true

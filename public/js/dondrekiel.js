@@ -247,7 +247,7 @@ function initMap() {
                                     "<strong>Veranstalter:</strong> " + info.organizer + "<br><br>" +
                                     nl2br(info.description, true)
                                 );
-                                $('#myModal').modal();
+                                $('#myModal').modal('show');
 
                             })
                             .fail(function () {

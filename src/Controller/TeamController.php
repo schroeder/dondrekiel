@@ -76,7 +76,7 @@ class TeamController extends AbstractFOSRestController
     ): Response {
 
         if (false === $this->isGranted('ROLE_TEAM')) {
-            return new JsonResponse(["error" => "not allowed"]);
+            return new JsonResponse(["error" => "not  to set position"]);
         }
 
         $team = $this->getUser();

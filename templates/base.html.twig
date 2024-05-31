@@ -9,44 +9,28 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/iconfont/material-icons.css">
     <link rel="stylesheet" href="/js/leaflet/leaflet.css">
+    <link rel="stylesheet" href="/css/dondrekiel.css">
     </head>
 <body>
 
-{{ include('parts/navigation.html.twig') }}
+{{ include('parts/header.html.twig') }}
 
 
-<div class="container map-container">
-    {% block body %}{% endblock %}
-</div>
+<main role="main" class="vh-100 container-fluid">
+    <div class="container-fluid map-container fill">
+        {% block body %}{% endblock %}
+    </div>
+</main>
 
-{#<script type="text/javascript">
-   var app_hostname = "{{ app_hostname }}";
-    var wss_enabled = {{ wss_enabled }};
-    var wss_port = {{ wss_port }};
-    var team_id = "{{ app.user.id }}";
-</script>
+{{ include('parts/footer.html.twig') }}
 
- {% if wss_enabled %}
-    {{ ws_client() }}
-{% endif %}
-#}
+
 {% block javascripts %}
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="/js/leaflet/leaflet.js"></script>
-<script src="/js/dondrekiel.js"></script>
-
-{# % javascripts
-     '%kernel.root_dir%/../vendor/components/jquery/jquery.js'
-    '@DondrekielAppBundle/Resources/public/js/leaflet/leaflet.js'
-    '@DondrekielAppBundle/Resources/public/js/lib/push_notification.min.js'
-    '%kernel.root_dir%/../vendor/twitter/bootstrap/dist/js/bootstrap.js'
-    '@DondrekielAppBundle/Resources/public/js/dondrekiel.js' %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts % #}
-
-        {% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script src="/js/leaflet/leaflet.js"></script>
+    <script src="/js/dondrekiel.js"></script>
+{% endblock %}
 </body>
 </html>
