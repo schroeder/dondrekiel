@@ -1,14 +1,16 @@
 <header>
-      <!-- Fixed navbar -->
-      <nav class="navbar navbar-expand-md fixed-top bg-light">
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="{{ asset('images/logo_small.png') }}" alt="Dondrekiel 2018" height="35px">
+          <img src="{{ asset('images/logo_small.png') }}" alt="Dondrekiel 2025" height="35px">
         </a>
 
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="true" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo01" style="background: red solid;">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="{{ path('dondrekiel_homepage', {'domain': 'dev.app.dondrekiel.de'}) }}">Spielplan</a>
@@ -26,8 +28,10 @@
                    href="{{ path('dondrekiel_home_contact', {'domain': 'dev.app.dondrekiel.de'}) }}">Kontakt</a>
             </li>
           </ul>
-        </div>
-      </nav>
 
-    
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     </header>

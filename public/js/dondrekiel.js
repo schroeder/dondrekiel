@@ -18,6 +18,16 @@ function nl2br(str, is_xhtml) {
 
 $(document).ready(function () {
 
+    window.addEventListener('beforeinstallprompt', (event) => {
+        // Prevent the mini-infobar from appearing on mobile.
+        event.preventDefault();
+        console.log('👍', 'beforeinstallprompt', event);
+        // Stash the event so it can be triggered later.
+        window.deferredPrompt = event;
+        // Remove the 'hidden' class from the install button container.
+        divInstall.classList.toggle('hidden', false);
+      });
+
     getCurrentTeam();
 
     L.Icon.Default.imagePath = '/js/leaflet/images/';
@@ -55,83 +65,12 @@ $(document).ready(function () {
     });
 
     $('#station-map').width($('#map-container').width());
-    $('#station-map').height($('#map-container').height());
-
-    /*if (wss_enabled == 1) {
-        websocket = WS.connect('wss://' + app_hostname + ':' + wss_port);
-
-        websocket.on("socket/connect", function (session) {
-            console.log("Successfully Connected!");
-
-            websocketSession = session;
-
-            session.subscribe("dondrekiel/channel", function (uri, payload) {
-                //$.notify("Received message: " + payload);
-                console.log("Received message: ", payload);
-                if (payload["position"] !== undefined && payload["position"]["team"] != undefined) {
-                    console.log("Set position for team " + payload["position"]["team"]);
-                    team_id = payload["position"]["team"];
-                    latitude = payload["position"]["latitude"];
-                    longitude = payload["position"]["longitude"];
-
-                    if (teamMarkerList[team_id] != undefined) {
-                        console.log("marker found for team " + payload["position"]["team"]);
-                        var teamMarker = teamMarkerList[team_id];
-                        if (currentTeam.id == team_id) {
-                            console.log("Current Team: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
-                            teamMarker.setIcon(redIcon);
-
-                        } else {
-                            console.log("Foreign team: " + currentTeam.id + "(" + currentTeam.locationLat + "/" + currentTeam.locationLng + ")");
-                        }
-
-                        var newLatLng = new L.LatLng(latitude, longitude);
-                        teamMarker.setLatLng(newLatLng);
-                    }
-
-                }
-                else if (payload["message"] !== undefined && payload["message"]["title"] != undefined) {
-                    message = payload["message"];
-                    console.log("Got a message!");
-                    $('#modalHeader').html(message["title"]);
-                    $('#modalContent').html(
-                        "<p>" + message["text"] + "</p>"
-                    );
-                    $('#myModal').modal();
-                }
-                else if (payload["station_update"] !== undefined && payload["station_update"]["station"] != undefined) {
-                    //message = payload["message"];
-                    console.log("Got station update!");
-                    stationId = payload["station_update"]["station"];
-                    if (stationMarkerList[stationId] != undefined) {
-                        console.log("Current Station: " + stationId);
-
-                        var stationMarker = stationMarkerList[stationId];
-                        if (payload["station_update"]["station"] == 2) {
-                            stationMarker.setIcon(grayIcon);
-                        } else {
-                            stationMarker.setIcon(blueIcon);
-                        }
-
-                    }
-                }
-            });
-        });
-
-        websocket.on('message', function incoming(data) {
-            console.log('Roundtrip time: ${Date.now() - data} ms');
-
-        });
-
-        websocket.on("socket/disconnect", function (error) {
-            console.log("Disconnected for " + error.reason + " with code " + error.code);
-        })
-    }*/
+    $('#station-map').height(window.innerHeight - 150);
 
     if (navigator && navigator.geolocation) {
         options = {
             enableHighAccuracy: false,
-            timeout: 5000,
+            timeout: 15000,
             maximumAge: 0
         };
         navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
@@ -141,7 +80,7 @@ $(document).ready(function () {
         setInterval(function () {
             console.log('Position update');
             navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-        }, 1200);
+        }, 15000);
     } else {
         console.log('Geolocation is not supported');
     }
@@ -185,8 +124,10 @@ function successCallback(position) {
             );
             var teamMarker = teamMarkerList[currentTeam.id];
 
-            var newLatLng = new L.LatLng(position.coords.latitude, position.coords.longitude);
-            teamMarker.setLatLng(newLatLng);
+            if (teamMarker) {
+                var newLatLng = new L.LatLng(position.coords.latitude, position.coords.longitude);
+                teamMarker.setLatLng(newLatLng);
+            }
 
     }
 
@@ -337,8 +278,10 @@ function getCurrentTeam() {
         .done(function (result) {
             if (result["result"] == true) {
                 currentTeam = result["current_team"];
+                console.log("Initialized current team");
+            } else {
+                $('#info-text').html("You are not logged in!")
             }
-            console.log("Initialized current team");
         })
         .fail(function () {
             console.log("Error initializing current team!");
