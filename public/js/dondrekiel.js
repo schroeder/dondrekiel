@@ -18,17 +18,9 @@ function nl2br(str, is_xhtml) {
 
 $(document).ready(function () {
 
-    window.addEventListener('beforeinstallprompt', (event) => {
-        // Prevent the mini-infobar from appearing on mobile.
-        event.preventDefault();
-        console.log('👍', 'beforeinstallprompt', event);
-        // Stash the event so it can be triggered later.
-        window.deferredPrompt = event;
-        // Remove the 'hidden' class from the install button container.
-        divInstall.classList.toggle('hidden', false);
-      });
-
     getCurrentTeam();
+
+    installPrompt();
 
     L.Icon.Default.imagePath = '/js/leaflet/images/';
 
@@ -289,3 +281,54 @@ function getCurrentTeam() {
 };
 
 
+function installPrompt() {
+    $( "#info-text" ).append( "<pre>" + "installPrompt" + "</pre>");
+
+    const pwaInstall = document.getElementById('a2hs');
+    const choiseResult = pwaInstall.prompt();
+    
+    const relatedApps = pwaInstall.getInstalledRelatedApps();
+    let isInstallSupportedPropertyValue = pwaInstall.isInstallSupported;
+    
+    let isInstallAvailablePropertyValue = pwaInstall.isInstallAvailable;
+    
+    let platformsPropertyValue = pwaInstall.platforms;
+    
+    let choiceResultPropertyValue = pwaInstall.choiceResult;
+    
+    let isGetInstalledRelatedAppsSupportedPropertyValue = pwaInstall.isGetInstalledRelatedAppsSupported;
+    
+    let relatedAppsPropertyValue = pwaInstall.relatedApps;
+    let isInstallSupportedAttributeValue = pwaInstall.hasAttribute('is-install-supported');
+    
+    let isInstallAvailableAttributeValue = pwaInstall.hasAttribute('is-install-available');
+    
+    let isGetInstalledRelatedAppsSupportedAttributeValue = pwaInstall.hasAttribute('is-get-installed-related-apps-supported');
+    pwaInstall.addEventListener('pwa-install-available', handlePWAInstallAvailableEvent);
+    
+    pwaInstall.addEventListener('pwa-install-installing', handlePWAInstallInstallingEvent);
+    
+    pwaInstall.addEventListener('pwa-install-installed', handlePWAInstallInstalledEvent);
+    
+    pwaInstall.addEventListener('pwa-install-error', handlePWAInstallErrorEvent);
+};
+
+const handlePWAInstallAvailableEvent = (event) => {
+    // Use event.detail.value and/or run any code
+    $( "#info-text" ).append( "<pre>" + "handlePWAInstallAvailableEvent" + "</pre>");
+}
+  
+const handlePWAInstallInstallingEvent = (event) => {
+    // Use event.detail.value and/or run any code
+    $( "#info-text" ).append( "<pre>" + "handlePWAInstallInstallingEvent" + "</pre>");
+}
+  
+const handlePWAInstallInstalledEvent = (event) => {
+    // Use event.detail.value and/or run any code
+    $( "#info-text" ).append( "<pre>" + "handlePWAInstallInstalledEvent" + "</pre>");
+}
+  
+const handlePWAInstallErrorEvent = (event) => {
+    // Use event.detail.message.error, event.detail.value and/or run any code
+    $( "#info-text" ).append( "<pre>" + "handlePWAInstallErrorEvent" + "</pre>");
+}

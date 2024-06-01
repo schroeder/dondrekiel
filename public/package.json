@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@progressivewebcomponents/pwa-install": "^0.2.1"
+  }
+}
