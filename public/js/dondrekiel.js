@@ -332,3 +332,5 @@ const handlePWAInstallErrorEvent = (event) => {
     // Use event.detail.message.error, event.detail.value and/or run any code
     $( "#info-text" ).append( "<pre>" + "handlePWAInstallErrorEvent" + "</pre>");
 }
+
+
